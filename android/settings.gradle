@@ -1,0 +1,5 @@
+rootProject.name = 'lucidataReact2'
+include ':react-native-sms-android'
+project(':react-native-sms-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sms-android/android')
+
+include ':app'
