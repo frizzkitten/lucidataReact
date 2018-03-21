@@ -13,6 +13,7 @@ import {
   Button
 } from 'react-native';
 
+import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 
 const instructions = Platform.select({
@@ -24,21 +25,38 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
-    sendText() {
-        console.log("HERE");
-        SmsAndroid.sms(
-            '9522502550', // phone number to send sms to
-            'FRIZZKITTEN THIS IS FROM LUCIDATA TELL ME IF YOU GET IT', // sms body
-            'sendDirect', // sendDirect or sendIndirect
-            (err, message) => {
-                if (err){
-                    console.log("error: ", err);
-                } else {
-                    console.log("callback message: ", message); // callback message
+    async sendText() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.SEND_SMS,
+                {
+                    'title': 'Lucidata Send SMS Permission',
+                    'message': 'Lucidata needs SMS permission in order to communicate with the server.'
                 }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Permission to send sms granted")
+
+                SmsAndroid.sms(
+                    '9522502550', // phone number to send sms to
+                    'FRIZZKITTEN THIS IS FROM LUCIDATA TELL ME IF YOU GET IT', // sms body
+                    'sendDirect', // sendDirect or sendIndirect
+                    (err, message) => {
+                        if (err){
+                            console.log("error: ", err);
+                        } else {
+                            console.log("callback message: ", message); // callback message
+                        }
+                    }
+                );
+            } else {
+                console.log("SMS permission denied")
             }
-        );
+        } catch (err) {
+            console.warn("error from try catch: ", err)
+        }
     }
+
 
   render() {
     return (
