@@ -9,4 +9,7 @@ This will give a (hopefully) complete guide to setting up this repo for developm
 4. Follow the instructions from React Native to be able to run on your phone/in browser: https://facebook.github.io/react-native/docs/getting-started.html
 5. Another link that may be useful is https://medium.com/software-research/setting-up-react-native-with-expo-typescript-jest-and-visual-studio-code-f05cda9763a3
 
+## Testing
+- Unit tests are run with the `yarn test` command.
+- (Not yet automated) ability to send and receive SMS.  Have to build and deploy the project on a phone and send/receive with that device.
 
