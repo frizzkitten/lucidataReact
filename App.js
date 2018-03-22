@@ -15,6 +15,7 @@ import {
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
+import SmsListener from 'react-native-android-sms-listener';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -25,8 +26,17 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+    constructor(props) {
+        super(props);
+
+        this.state = {messages: []};
+    }
+
+
+    // send a text
     async sendText() {
         try {
+            // see if we have permission to send a text
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.SEND_SMS,
                 {
@@ -37,6 +47,7 @@ export default class App extends Component<Props> {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Permission to send sms granted")
 
+                // if we have permission, send the text
                 SmsAndroid.sms(
                     '9522502550', // phone number to send sms to
                     'FRIZZKITTEN THIS IS FROM LUCIDATA TELL ME IF YOU GET IT', // sms body
@@ -45,16 +56,32 @@ export default class App extends Component<Props> {
                         if (err){
                             console.log("error: ", err);
                         } else {
+                            // text successfully send
                             console.log("callback message: ", message); // callback message
                         }
                     }
                 );
-            } else {
+            }
+            // if we don't have permission, just log that we don't
+            else {
                 console.log("SMS permission denied")
             }
         } catch (err) {
             console.warn("error from try catch: ", err)
         }
+    }
+
+
+    componentDidMount() {
+        // listen for new messages
+        SmsListener.addListener(message => {
+            console.info(message);
+            // duplicate the messages array
+            let newMessages = this.state.messages.slice();
+            // add the new messages to the array
+            newMessages.push(message);
+            this.setState({messages: newMessages});
+        })
     }
 
 
