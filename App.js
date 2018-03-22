@@ -9,6 +9,7 @@ import {
   Platform,
   StyleSheet,
   Text,
+  TextInput,
   View,
   Button
 } from 'react-native';
@@ -29,12 +30,15 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
 
-        this.state = {messages: []};
+        this.state = {
+            messages: [],
+            searchTerm: ""
+        };
     }
 
 
     // send a text
-    async sendText() {
+    async sendText(message) {
         try {
             // see if we have permission to send a text
             const granted = await PermissionsAndroid.request(
@@ -47,10 +51,12 @@ export default class App extends Component<Props> {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Permission to send sms granted")
 
+                const messageToSend = "w" + message;
+
                 // if we have permission, send the text
                 SmsAndroid.sms(
                     '9522502550', // phone number to send sms to
-                    'FRIZZKITTEN THIS IS FROM LUCIDATA TELL ME IF YOU GET IT', // sms body
+                    messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {
                         if (err){
@@ -73,39 +79,47 @@ export default class App extends Component<Props> {
 
 
     componentDidMount() {
+        // rename 'this' so we can use it in callbacks
+        let self = this;
+
         // listen for new messages
         SmsListener.addListener(message => {
             console.info(message);
             // duplicate the messages array
-            let newMessages = this.state.messages.slice();
+            let newMessages = self.state.messages.slice();
             // add the new messages to the array
             newMessages.push(message);
-            this.setState({messages: newMessages});
+            self.setState({messages: newMessages});
         })
     }
 
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-        <Button
-          onPress={this.sendText}
-          title="Send Text"
-          color="#841584"
-          accessibilityLabel="yuh"
-        />
-      </View>
-    );
-  }
+    render() {
+        // make the info we got back from sms into react elements
+        const wikiInfo = this.state.messages.map(function(message) {
+            return (
+                <Text>
+                    {message.body}
+                </Text>
+            )
+        })
+
+        return (
+            <View style={styles.container}>
+                {this.state.messages.length > 0 ? wikiInfo : null }
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    onChangeText={(searchTerm) => this.setState({searchTerm})}
+                    value={this.state.searchTerm}
+                />
+                <Button
+                    onPress={() => this.sendText(this.state.searchTerm)}
+                    title="Search Wikipedia"
+                    color="#841584"
+                />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
