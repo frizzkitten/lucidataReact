@@ -51,11 +51,11 @@ export default class App extends Component<Props> {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Permission to send sms granted")
 
-                const messageToSend = "w" + message;
+                const messageToSend = "wikipedia," + message;
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    '9522502550', // phone number to send sms to
+                    '3312156629', // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {
@@ -95,10 +95,11 @@ export default class App extends Component<Props> {
 
 
     render() {
+        let infoCounter = 0;
         // make the info we got back from sms into react elements
         const wikiInfo = this.state.messages.map(function(message) {
             return (
-                <Text>
+                <Text key={"info" + infoCounter}>
                     {message.body}
                 </Text>
             )
