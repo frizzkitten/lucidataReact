@@ -15,16 +15,17 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-// import WikipediaScreen from "./screens/wikipedia";
+import WikipediaScreen from "./screens/wikipedia";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
 
-class HomeScreen extends Component {
+export default class WikipediaScreen extends Component {
     constructor(props) {
         super(props);
+        
 
         this.state = {
             messages: [],
@@ -132,40 +133,6 @@ class HomeScreen extends Component {
                 }
             </View>
         );
-    }
-}
-
-
-// class HomeScreen extends Component {
-//     constructor(props) {
-//         super(props);
-//     }
-//
-//     render() {
-//         return (
-//             <View>Home!</View>
-//         );
-//     }
-// }
-
-
-const RootStack = StackNavigator(
-    {
-        Home: {
-            screen: HomeScreen,
-        },
-        // Wikipedia: {
-        //     screen: WikipediaScreen,
-        // }
-    },
-    // {
-    //     initialRouteName: "Home"
-    // }
-);
-
-export default class App extends React.Component {
-    render() {
-        return <RootStack />;
     }
 }
 
