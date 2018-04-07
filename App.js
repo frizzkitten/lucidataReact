@@ -72,7 +72,7 @@ class Routes extends React.Component {
 }
 
 const App = () => (
-    <Provider>
+    <Provider store={store}>
         <Routes />
     </Provider>
 );

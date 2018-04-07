@@ -10,13 +10,17 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
+import { connect } from 'react-redux';
+import { ActionCreators } from '../app/actions';
+import { bindActionCreators } from 'redux';
+
 import { parseText } from "../smsFunctions";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
-export default class WikipediaScreen extends Component {
+class WikipediaScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -142,3 +146,11 @@ const styles = StyleSheet.create({
     margin: 10,
   }
 });
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch);
+}
+
+// export default WikipediaScreen;
+
+export default connect(() => { return {} }, mapDispatchToProps)(WikipediaScreen);
