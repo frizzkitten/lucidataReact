@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-import { parseText } from "smsFunctions";
+import { parseText } from "../smsFunctions";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';

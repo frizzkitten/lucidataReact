@@ -15,6 +15,27 @@ import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+
+import reducer from './app/reducers';
+
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
+
+function configureStore(initialState) {
+    const enhancer = compose(
+        applyMiddleware(
+            thunkMiddleware,
+            loggerMiddleware,
+        ),
+    );
+    return createStore(reducer, initialState, enhancer);
+}
+
+const store = configureStore({});
+
 
 class HomeScreen extends Component {
     render() {
@@ -44,7 +65,7 @@ const RootStack = StackNavigator(
     }
 );
 
-export default class App extends React.Component {
+export default class Routes extends React.Component {
     render() {
         return <RootStack />;
     }
