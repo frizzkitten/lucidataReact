@@ -11,7 +11,8 @@ import {
   Text,
   TextInput,
   View,
-  Button
+  Button,
+  ActivityIndicator
 } from 'react-native';
 
 import { PermissionsAndroid } from 'react-native';
@@ -32,13 +33,16 @@ export default class App extends Component<Props> {
 
         this.state = {
             messages: [],
-            searchTerm: ""
+            searchTerm: "",
+            awaitingText: false
         };
     }
 
 
     // send a text
     async sendText(message) {
+        const PRODUCTION_NUMBER = '3312156629';
+        const AUSTIN_NUMBER = '9522502550';
         try {
             // see if we have permission to send a text
             const granted = await PermissionsAndroid.request(
@@ -53,9 +57,12 @@ export default class App extends Component<Props> {
 
                 const messageToSend = "wikipedia," + message;
 
+                // show the loading spinner while waiting for response
+                this.setState({awaitingText: true});
+
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    '3312156629', // phone number to send sms to
+                    AUSTIN_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {
@@ -89,7 +96,10 @@ export default class App extends Component<Props> {
             let newMessages = self.state.messages.slice();
             // add the new messages to the array
             newMessages.push(message);
-            self.setState({messages: newMessages});
+            self.setState({
+                messages: newMessages,
+                awaitingText: false
+            });
         })
     }
 
@@ -118,6 +128,13 @@ export default class App extends Component<Props> {
                     title="Search Wikipedia"
                     color="#841584"
                 />
+                {this.state.awaitingText ?
+                    // show loading spinner if we're waiting on a text
+                    <ActivityIndicator size="large" color="#0000ff" />
+                :
+                    // if not waiting on a text, don't show anything here
+                    null
+                }
             </View>
         );
     }
