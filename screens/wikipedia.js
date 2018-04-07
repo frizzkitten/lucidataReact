@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
+import { parseText } from "smsFunctions";
+
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
@@ -42,7 +44,7 @@ export default class WikipediaScreen extends Component {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Permission to send sms granted")
 
-                const messageToSend = "wikipedia," + message;
+                const messageToSend = "w," + message;
 
                 // show the loading spinner while waiting for response
                 this.setState({awaitingText: true});
