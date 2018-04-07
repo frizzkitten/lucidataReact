@@ -65,11 +65,19 @@ const RootStack = StackNavigator(
     }
 );
 
-export default class Routes extends React.Component {
+class Routes extends React.Component {
     render() {
         return <RootStack />;
     }
 }
+
+const App = () => (
+    <Provider>
+        <Routes />
+    </Provider>
+);
+
+export default App;
 
 
 const styles = StyleSheet.create({
