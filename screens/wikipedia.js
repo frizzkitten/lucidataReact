@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -15,17 +9,14 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import WikipediaScreen from "./screens/wikipedia";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
-
 export default class WikipediaScreen extends Component {
     constructor(props) {
         super(props);
-        
 
         this.state = {
             messages: [],
@@ -135,7 +126,6 @@ export default class WikipediaScreen extends Component {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
   container: {
