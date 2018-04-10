@@ -1,7 +1,13 @@
-export function addMessages(messages) {
-    console.log("in the action creator");
+export function setMessages(messages) {
     return {
-        type: "ADD_MESSAGES",
+        type: "SET_MESSAGES",
         messages: messages
+    }
+}
+
+export function addMessage(message) {
+    return {
+        type: "ADD_MESSAGE",
+        message: message
     }
 }

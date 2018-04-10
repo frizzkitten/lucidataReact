@@ -51,7 +51,7 @@ class WikipediaScreen extends Component {
                 smsArr.forEach(message => {
                     messages.push(message.body);
                 });
-                this.props.addMessages(messages);
+                this.props.setMessages(messages);
             }
         );
 
@@ -120,6 +120,10 @@ class WikipediaScreen extends Component {
             let newMessages = self.state.messages.slice();
             // add the new messages to the array
             newMessages.push(message.body);
+
+            // add the message to redux state's messages array
+            this.props.addMessage(message.body);
+
             self.setState({
                 messages: newMessages,
                 awaitingText: false
@@ -132,6 +136,7 @@ class WikipediaScreen extends Component {
         let infoCounter = 0;
         // make the info we got back from sms into react elements
         const wikiInfo = this.state.messages.map(function(message) {
+            infoCounter++;
             return (
                 <Text key={"info" + infoCounter}>
                     {message}
