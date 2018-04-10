@@ -24,6 +24,9 @@
     "react-test-renderer": "^16.3.0-alpha.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|react-native-android-sms-listener|react-navigation|react-native-safe-area-view)/)"
+    ]
   }
 }
