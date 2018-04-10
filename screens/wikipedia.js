@@ -14,7 +14,8 @@ import { connect } from 'react-redux';
 import { ActionCreators } from '../app/actions';
 import { bindActionCreators } from 'redux';
 
-import { parseText } from "../smsFunctions";
+import { parseSms } from "../app/lib/parseSms";
+import readTexts from "../app/lib/readTexts"
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -24,36 +25,13 @@ class WikipediaScreen extends Component {
     constructor(props) {
         super(props);
 
-        // empty array that will contain the bodies of all Lucidata messages
-        let msgs = [];
-
-        const PRODUCTION_NUMBER = '+13312156629';
-        const AUSTIN_NUMBER = '+19522502550';
-
-        var filter = {
-            box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-            // address: '+97433------', // sender's phone number
-            address: AUSTIN_NUMBER,
-            // the next 2 filters can be used for pagination
-            indexFrom: 0, // start from index 0
-            maxCount: 10, // count of SMS to return each time
-        };
-
-        // // find all the messages from Lucidata
-        SmsAndroid.list(JSON.stringify(filter),
-            // on error
-            (fail) => {
-                console.log("Error getting sms list: " + fail)
-            },
-            // on successful read
-            (count, smsList) => {
-                var smsArr = JSON.parse(smsList);
-                smsArr.forEach(message => {
-                    msgs.push(message.body);
-                });
-                this.props.setMessages(msgs);
-            }
-        );
+        readTexts()
+        .then(msgs => {
+            this.props.setMessages(msgs);
+        })
+        .catch(err => {
+            console.log("Error getting messages");
+        });
 
         this.state = {
             searchTerm: "",
@@ -85,7 +63,7 @@ class WikipediaScreen extends Component {
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    AUSTIN_NUMBER, // phone number to send sms to
+                    PRODUCTION_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {
