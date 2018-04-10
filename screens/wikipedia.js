@@ -24,8 +24,39 @@ class WikipediaScreen extends Component {
     constructor(props) {
         super(props);
 
+        // empty array that will contain the bodies of all Lucidata messages
+        let messages = [];
+
+        const PRODUCTION_NUMBER = '+13312156629';
+        const AUSTIN_NUMBER = '+19522502550';
+
+        var filter = {
+            box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+            // address: '+97433------', // sender's phone number
+            address: AUSTIN_NUMBER,
+            // the next 2 filters can be used for pagination
+            indexFrom: 0, // start from index 0
+            maxCount: 10, // count of SMS to return each time
+        };
+
+        // // find all the messages from Lucidata
+        SmsAndroid.list(JSON.stringify(filter),
+            // on error
+            (fail) => {
+                console.log("Error getting sms list: " + fail)
+            },
+            // on successful read
+            (count, smsList) => {
+                var smsArr = JSON.parse(smsList);
+                smsArr.forEach(message => {
+                    messages.push(message.body);
+                });
+                this.props.addMessages(messages);
+            }
+        );
+
         this.state = {
-            messages: [],
+            messages: messages,
             searchTerm: "",
             awaitingText: false
         };
@@ -84,11 +115,11 @@ class WikipediaScreen extends Component {
 
         // listen for new messages
         SmsListener.addListener(message => {
-            console.info(message);
+            console.log(message);
             // duplicate the messages array
             let newMessages = self.state.messages.slice();
             // add the new messages to the array
-            newMessages.push(message);
+            newMessages.push(message.body);
             self.setState({
                 messages: newMessages,
                 awaitingText: false
@@ -103,7 +134,7 @@ class WikipediaScreen extends Component {
         const wikiInfo = this.state.messages.map(function(message) {
             return (
                 <Text key={"info" + infoCounter}>
-                    {message.body}
+                    {message}
                 </Text>
             )
         })

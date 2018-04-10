@@ -1,4 +1,4 @@
-import * as SmsActions from './sms';
+import * as SmsActions from './smsActions';
 
 export const ActionCreators = Object.assign({},
     SmsActions,
