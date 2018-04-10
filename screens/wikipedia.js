@@ -25,7 +25,7 @@ class WikipediaScreen extends Component {
         super(props);
 
         // empty array that will contain the bodies of all Lucidata messages
-        let messages = [];
+        let msgs = [];
 
         const PRODUCTION_NUMBER = '+13312156629';
         const AUSTIN_NUMBER = '+19522502550';
@@ -49,14 +49,13 @@ class WikipediaScreen extends Component {
             (count, smsList) => {
                 var smsArr = JSON.parse(smsList);
                 smsArr.forEach(message => {
-                    messages.push(message.body);
+                    msgs.push(message.body);
                 });
-                this.props.setMessages(messages);
+                this.props.setMessages(msgs);
             }
         );
 
         this.state = {
-            messages: messages,
             searchTerm: "",
             awaitingText: false
         };
@@ -115,38 +114,30 @@ class WikipediaScreen extends Component {
 
         // listen for new messages
         SmsListener.addListener(message => {
-            console.log(message);
-            // duplicate the messages array
-            let newMessages = self.state.messages.slice();
-            // add the new messages to the array
-            newMessages.push(message.body);
-
             // add the message to redux state's messages array
             this.props.addMessage(message.body);
 
-            self.setState({
-                messages: newMessages,
-                awaitingText: false
-            });
+            self.setState({awaitingText: false});
         })
     }
 
 
     render() {
         let infoCounter = 0;
+
         // make the info we got back from sms into react elements
-        const wikiInfo = this.state.messages.map(function(message) {
+        const wikiInfo = this.props.messages ? this.props.messages.map(function(message) {
             infoCounter++;
             return (
                 <Text key={"info" + infoCounter}>
                     {message}
                 </Text>
             )
-        })
+        }) : null;
 
         return (
             <View style={styles.container}>
-                {this.state.messages.length > 0 ? wikiInfo : null }
+                {this.props.messages.length > 0 ? wikiInfo : null }
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(searchTerm) => this.setState({searchTerm})}
@@ -187,6 +178,10 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(ActionCreators, dispatch);
 }
 
-// export default WikipediaScreen;
+function mapStateToProps(state) {
+    return {
+        messages: state.messages
+    }
+}
 
-export default connect(() => { return {} }, mapDispatchToProps)(WikipediaScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(WikipediaScreen);
