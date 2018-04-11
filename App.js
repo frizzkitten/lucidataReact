@@ -9,7 +9,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import WikipediaScreen from "./screens/wikipedia";
+import Wikipedia from "./screens/wikipedia";
+import Weather from "./screens/weather";
+import Directions from "./screens/directions";
+import Sports from "./screens/sports";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -39,12 +42,20 @@ const store = configureStore({});
 
 class HomeScreen extends Component {
     render() {
+        const screens = ["Wikipedia", "Weather", "Directions", "Sports"];
+        const buttons = screens.map(screen => {
+            return (
+                <Button
+                    style={styles.screenSwitchButton}
+                    title={screen}
+                    onPress={() => this.props.navigation.navigate(screen)}
+                />
+            )
+        });
+
         return (
             <View style={styles.container}>
-                <Button
-                    title="Go to Wikipedia Screen"
-                    onPress={() => this.props.navigation.navigate('Wikipedia')}
-                />
+                { buttons }
             </View>
         );
     }
@@ -53,12 +64,11 @@ class HomeScreen extends Component {
 
 const RootStack = StackNavigator(
     {
-        Home: {
-            screen: HomeScreen,
-        },
-        Wikipedia: {
-            screen: WikipediaScreen,
-        }
+        Home: { screen: HomeScreen },
+        Wikipedia: { screen: Wikipedia },
+        Weather: { screen: Weather },
+        Sports: { screen: Sports },
+        Directions: { screen: Directions },
     },
     {
         initialRouteName: "Home"
@@ -81,15 +91,18 @@ export default App;
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
+    screenSwitchButton: {
+        margin: 5
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    }
 });

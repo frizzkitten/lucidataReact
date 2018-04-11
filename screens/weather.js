@@ -21,7 +21,7 @@ import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
-class Wikipedia extends Component {
+class Weather extends Component {
     constructor(props) {
         super(props);
 
@@ -167,4 +167,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wikipedia);
+export default connect(mapStateToProps, mapDispatchToProps)(Weather);
