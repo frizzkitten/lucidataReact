@@ -45,7 +45,7 @@ class HomeScreen extends Component {
         const screens = ["Wikipedia", "Weather", "Directions", "Sports"];
         const buttons = screens.map(screen => {
             return (
-                <Button
+                <Button key={screen}
                     style={styles.screenSwitchButton}
                     title={screen}
                     onPress={() => this.props.navigation.navigate(screen)}
