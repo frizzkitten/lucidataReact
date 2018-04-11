@@ -19,6 +19,31 @@ export default function parseSms(message) {
                 }
                 return {api: "wikipedia", info: info};
                 break;
+            case "d":
+                let directionsList = [];
+                // if the message has info in it, return that info
+                if (message.length > COMMA_INDEX + 2) {
+                    // the message without the comma, so only relevant information
+                    const noCommaMessage = message.substring(COMMA_INDEX + 1);
+                    // split into a list of non-formatted directions
+                    const directionsPreFormat = noCommaMessage.split(";");
+                    // split each direction into a mile amount and then information
+                    directionsList = directionsPreFormat.map(direction => {
+                        let distance = "";
+                        let info = "";
+                        try {
+                            const distanceStart = 1;
+                            const distanceEnd = direction.indexOf(')');
+                            distance = direction.substring(distanceStart, distanceEnd);
+                            info = direction.substring(distanceEnd + 1);
+                        } catch (err) {
+                            return {};
+                        }
+                        return { distance, info };
+                    });
+                }
+                return {api: "directions", directionsList: directionsList};
+                break;
             default:
                 return {api: "not found"};
                 break;

@@ -43,7 +43,7 @@ class Wikipedia extends Component {
 
     // send a text
     async sendText(message) {
-        const messageToSend = "w," + message;
+        const messageToSend = "d," + message;
 
         // show the loading spinner while waiting for response
         this.setState({awaitingText: true});
@@ -80,7 +80,7 @@ class Wikipedia extends Component {
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
-            if (message.api === "wikipedia") {
+            if (message.api === "directions") {
                 // if it is wikipedia type, show it as the info
                 wikiInfo = (
                     <Text>
@@ -102,7 +102,7 @@ class Wikipedia extends Component {
                 />
                 <Button
                     onPress={() => this.sendText(this.state.searchTerm)}
-                    title="Search Wikipedia"
+                    title="Find Directions"
                     color="#841584"
                 />
                 {this.state.awaitingText ?
