@@ -14,8 +14,8 @@ import { connect } from 'react-redux';
 import { ActionCreators } from '../app/actions';
 import { bindActionCreators } from 'redux';
 
-import { parseSms } from "../app/lib/parseSms";
-import readTexts from "../app/lib/readTexts"
+import parseSms from "../app/lib/parseSms";
+import readTexts from "../app/lib/readTexts";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -44,6 +44,7 @@ class WikipediaScreen extends Component {
     async sendText(message) {
         const PRODUCTION_NUMBER = '3312156629';
         const AUSTIN_NUMBER = '9522502550';
+
         try {
             // see if we have permission to send a text
             const granted = await PermissionsAndroid.request(
@@ -63,7 +64,7 @@ class WikipediaScreen extends Component {
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    PRODUCTION_NUMBER, // phone number to send sms to
+                    AUSTIN_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {
@@ -92,8 +93,11 @@ class WikipediaScreen extends Component {
 
         // listen for new messages
         SmsListener.addListener(message => {
-            // add the message to redux state's messages array
-            this.props.addMessage(message.body);
+            let parsedMessage = parseSms(mesage.body);
+            // add the message to redux state's messages array if it has valid info
+            if (!parsedMessage || parsedMessage.api === "not found") {
+                this.props.addMessage(message);
+            }
 
             self.setState({awaitingText: false});
         })
@@ -101,21 +105,27 @@ class WikipediaScreen extends Component {
 
 
     render() {
-        let infoCounter = 0;
-
-        // make the info we got back from sms into react elements
-        const wikiInfo = this.props.messages ? this.props.messages.map(function(message) {
-            infoCounter++;
-            return (
-                <Text key={"info" + infoCounter}>
-                    {message}
-                </Text>
-            )
-        }) : null;
+        // initially, wikipedia information will be empty
+        let wikiInfo = null;
+        let messages = this.props.messages;
+        // look through the messages received to see if any are of wikipedia type
+        for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
+            let message = messages[messageIndex];
+            if (message.api === "wikipedia") {
+                // if it is wikipedia type, show it as the info
+                wikiInfo = (
+                    <Text>
+                        {message.info}
+                    </Text>
+                );
+                // can only have one wikipedia info section showing at a time
+                break;
+            }
+        }
 
         return (
             <View style={styles.container}>
-                {this.props.messages.length > 0 ? wikiInfo : null }
+                { wikiInfo }
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(searchTerm) => this.setState({searchTerm})}
@@ -144,11 +154,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
   }
 });
 

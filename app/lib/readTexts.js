@@ -1,4 +1,5 @@
 import SmsAndroid from 'react-native-sms-android';
+import parseSms from './parseSms';
 
 export default function readTexts() {
     return new Promise((resolve, reject) => {
@@ -26,9 +27,16 @@ export default function readTexts() {
             },
             // on successful read
             (count, smsList) => {
+                console.log("smsList: ", smsList);
                 var smsArr = JSON.parse(smsList);
                 smsArr.forEach(message => {
-                    msgs.push(message.body);
+                    // parse the text
+                    const parsedMessage = parseSms(message.body);
+
+                    // if sms is valid, add the parsed version
+                    if (parsedMessage && parsedMessage.api !== "not found") {
+                        msgs.push(parsedMessage);
+                    }
                 });
                 resolve(msgs);
             }
