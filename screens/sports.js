@@ -93,7 +93,7 @@ class Sports extends Component {
 
         // listen for new messages
         SmsListener.addListener(message => {
-            let parsedMessage = parseSms(mesage.body);
+            let parsedMessage = parseSms(message.body);
             // add the message to redux state's messages array if it has valid info
             if (!parsedMessage || parsedMessage.api === "not found") {
                 this.props.addMessage(message);

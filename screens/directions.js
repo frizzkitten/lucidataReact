@@ -16,12 +16,13 @@ import { bindActionCreators } from 'redux';
 
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
+import sendSms from "../app/lib/sendSms";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
 
-class Directions extends Component {
+class Wikipedia extends Component {
     constructor(props) {
         super(props);
 
@@ -42,48 +43,14 @@ class Directions extends Component {
 
     // send a text
     async sendText(message) {
-        const PRODUCTION_NUMBER = '3312156629';
-        const AUSTIN_NUMBER = '9522502550';
+        const messageToSend = "w," + message;
 
-        try {
-            // see if we have permission to send a text
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.SEND_SMS,
-                {
-                    'title': 'Lucidata Send SMS Permission',
-                    'message': 'Lucidata needs SMS permission in order to communicate with the server.'
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("Permission to send sms granted")
-
-                const messageToSend = "w," + message;
-
-                // show the loading spinner while waiting for response
-                this.setState({awaitingText: true});
-
-                // if we have permission, send the text
-                SmsAndroid.sms(
-                    AUSTIN_NUMBER, // phone number to send sms to
-                    messageToSend, // sms body
-                    'sendDirect', // sendDirect or sendIndirect
-                    (err, message) => {
-                        if (err){
-                            console.log("error: ", err);
-                        } else {
-                            // text successfully send
-                            console.log("callback message: ", message); // callback message
-                        }
-                    }
-                );
-            }
-            // if we don't have permission, just log that we don't
-            else {
-                console.log("SMS permission denied")
-            }
-        } catch (err) {
-            console.warn("error from try catch: ", err)
-        }
+        // show the loading spinner while waiting for response
+        this.setState({awaitingText: true});
+        sendSms(messageToSend)
+        .catch(err => {
+            console.log("error sending text: ", error);
+        })
     }
 
 
@@ -93,10 +60,12 @@ class Directions extends Component {
 
         // listen for new messages
         SmsListener.addListener(message => {
-            let parsedMessage = parseSms(mesage.body);
+            let parsedMessage = parseSms(message.body);
+            console.log("parsed message is: ", parsedMessage);
+
             // add the message to redux state's messages array if it has valid info
-            if (!parsedMessage || parsedMessage.api === "not found") {
-                this.props.addMessage(message);
+            if (parsedMessage && parsedMessage.api !== "not found") {
+                this.props.addMessage(parsedMessage);
             }
 
             self.setState({awaitingText: false});
@@ -109,7 +78,7 @@ class Directions extends Component {
         let wikiInfo = null;
         let messages = this.props.messages;
         // look through the messages received to see if any are of wikipedia type
-        for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
+        for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
             if (message.api === "wikipedia") {
                 // if it is wikipedia type, show it as the info
@@ -167,4 +136,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Directions);
+export default connect(mapStateToProps, mapDispatchToProps)(Wikipedia);

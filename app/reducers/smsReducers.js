@@ -14,7 +14,7 @@ export const messages = createReducer([], {
         // copy the old messages state array
         let newMessages = state.slice();
         // add the new message
-        newMessages.push(action.message);
+        newMessages.unshift(action.message);
         // return the new state
         return newMessages;
     }
