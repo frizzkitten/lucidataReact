@@ -45,7 +45,7 @@ class HomeScreen extends Component {
         const screens = ["Wikipedia", "Weather", "Directions", "Sports"];
         const buttons = screens.map(screen => {
             return (
-                <Button
+                <Button key={screen}
                     style={styles.screenSwitchButton}
                     title={screen}
                     onPress={() => this.props.navigation.navigate(screen)}
@@ -54,8 +54,26 @@ class HomeScreen extends Component {
         });
 
         return (
-            <View style={styles.container}>
-                { buttons }
+            <View style={{flex: 1}}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>Lucidata</Text>
+                </View>
+                <View style={{flex: 2, flexDirection: 'row'}}>
+                    <View style={styles.container}>
+                     { buttons[0] }
+                    </View>
+                    <View style={styles.container}>
+                     { buttons[1] }
+                    </View>
+                </View>
+                <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={styles.container}>
+                     { buttons[2] }
+                    </View>
+                    <View style={styles.container}>
+                     { buttons[3] }
+                    </View>
+                </View>    
             </View>
         );
     }
@@ -95,6 +113,12 @@ const styles = StyleSheet.create({
         margin: 5
     },
     container: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    titleContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -104,5 +128,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
+    },
+    title: {
+        fontWeight: 'bold',
+        fontFamily: 'Courier New',
+        fontSize: 54,
+        fontStyle: 'italic',
+        letterSpacing: 3,
+        textShadowColor: '#d6e0f5',
+        textShadowOffset: {width: 8, height: 8},
+        color: '#004de6'
     }
 });
