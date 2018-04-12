@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
 import sendSms from "../app/lib/sendSms";
+import getLocation from "../app/lib/getLocation";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -74,6 +75,14 @@ class Wikipedia extends Component {
 
 
     render() {
+        // getLocation()
+        // .then(location => {
+        //     console.log("location in direction.js: ", location);
+        // })
+        // .catch(error => {
+        //     console.log("error getting location info: ", error);
+        // });
+
         // initially, wikipedia information will be empty
         let wikiInfo = null;
         let messages = this.props.messages;
