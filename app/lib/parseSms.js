@@ -8,14 +8,14 @@ export default function parseSms(message) {
 
         // the first letter of the message determines which api it is for
         let apiChar = message.charAt(0);
-        const COMMA_INDEX = 1;
+        const API_TYPE_INDEX = 0;
         switch (apiChar) {
             // using wikipedia api
             case "w":
                 let info = "No info found about that topic :(";
                 // if the message has info in it, return that info
-                if (message.length > COMMA_INDEX + 2) {
-                    info = message.substring(COMMA_INDEX + 1);
+                if (message.length > API_TYPE_INDEX + 2) {
+                    info = message.substring(API_TYPE_INDEX + 1);
                 }
                 return {api: "wikipedia", info: info};
                 break;
@@ -24,7 +24,7 @@ export default function parseSms(message) {
                 // if the message has info in it, return that info
                 if (message.length > COMMA_INDEX + 2) {
                     // the message without the comma, so only relevant information
-                    const noCommaMessage = message.substring(COMMA_INDEX + 1);
+                    const noCommaMessage = message.substring(API_TYPE_INDEX + 1);
                     // split into a list of non-formatted directions
                     const directionsPreFormat = noCommaMessage.split(";");
                     // split each direction into a mile amount and then information
@@ -43,6 +43,149 @@ export default function parseSms(message) {
                     });
                 }
                 return {api: "directions", directionsList: directionsList};
+                break;
+            case "f":
+                // if the message has info in it, return that info
+                if (message.length > API_TYPE_INDEX + 2) {
+                    try {
+                        // the message without the comma, so only relevant information
+                        const onlyContent = message.substring(API_TYPE_INDEX + 2);
+                        // split into a list of non-formatted directions
+                        const weatherType = message.charAt(API_TYPE_INDEX + 1);
+
+                        switch (weatherType) {
+                            case "a":
+                                // const weatherPreFormat = onlyContent.split("/");
+                                // const weatherPostFormat = weatherPreFormat.map(weatherString => {
+                                //     return weatherString.substring(1);
+                                // });
+                                //return {api: "weather", weatherType: "Alerts", alerts: weatherPostFormat};
+                                return {api: "weather", weatherType: "Alerts", alerts: onlyContent.split("/")}
+                                break;
+                            case "2":
+                                const hoursPreFormat = onlyContent.split("/");
+                                // get current hour of the day
+                                let currHour = (new Date()).getHours();
+
+                                let hoursInfoArr = [];
+                                hoursPreFormat.forEach(hourInfo => {
+                                    if (hourInfo !== "") {
+                                        currHour++;
+                                        if (currHour === 24) {
+                                            currHour = 0;
+                                        }
+                                        let infoObj = {hour: currHour};
+                                        const infoArr = hourInfo.split(";");
+                                        let counter = 0;
+                                        infoArr.forEach(information => {
+                                            counter++;
+                                            switch (counter) {
+                                                case 1:
+                                                    infoObj.info = information;
+                                                    break;
+                                                case 2:
+                                                    infoObj.temp = information;
+                                                    break;
+                                                case 3:
+                                                    infoObj.precip = information;
+                                                    break;
+                                                case 4:
+                                                    infoObj.precipChance = information;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        })
+
+                                        // at this point we should have an array of
+                                        // {
+                                        //      hour: 15,
+                                        //      info: "aasdfasdf",
+                                        //      temp: "23"
+                                        //      precip: "snow"
+                                        //      precipChance: "33"
+                                        // }
+                                        hoursInfoArr.push(infoObj);
+                                    }
+                                });
+                                return {api: "weather", weatherType: "24 Hour", infoArr: hoursInfoArr};
+                                break;
+                            case "7":
+                                const daysPreFormat = onlyContent.split("/");
+                                // current day is first
+                                let currDay = 0;
+
+                                let daysInfoArr = [];
+                                daysPreFormat.forEach(dayInfo => {
+                                    if (dayInfo !== "") {
+                                        currDay++;
+                                        let infoObj = {day: currDay};
+                                        const infoArr = dayInfo.split(";");
+                                        let counter = 0;
+                                        infoArr.forEach(information => {
+                                            counter++;
+                                            switch (counter) {
+                                                case 1:
+                                                    infoObj.info = information;
+                                                    break;
+                                                case 2:
+                                                    infoObj.high = information;
+                                                    break;
+                                                case 3:
+                                                    infoObj.low = information;
+                                                    break;
+                                                case 4:
+                                                    infoObj.precip = information;
+                                                    break;
+                                                case 5:
+                                                    infoObj.precipChance = information;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        })
+
+                                        // at this point we should have an array of
+                                        // {
+                                        //      day: 4,
+                                        //      info: "aasdfasdf",
+                                        //      temp: "23"
+                                        //      precip: "snow"
+                                        //      precipChance: "33"
+                                        // }
+                                        daysInfoArr.push(infoObj);
+                                    }
+                                });
+                                return {api: "weather", weatherType: "7 Day", infoArr: daysInfoArr};
+                                break;
+                            default:
+                                // if weather type is not one of these, can't parse
+                                return {api: "not found"};
+                        }
+                        // split each direction into a mile amount and then information
+                        directionsList = directionsPreFormat.map(direction => {
+                            let distance = "";
+                            let info = "";
+                            try {
+                                const distanceStart = 1;
+                                const distanceEnd = direction.indexOf(')');
+                                distance = direction.substring(distanceStart, distanceEnd);
+                                info = direction.substring(distanceEnd + 1);
+                            } catch (err) {
+                                return {};
+                            }
+                            return { distance, info };
+                        });
+                    }
+                    catch (parseError) {
+                        console.log("error parsing weather info: ", parseError);
+                        return {api: "not found"}
+                    }
+                }
+                // if text doesn't have enough info, return not found
+                else {
+                    return {api: "not found"};
+                }
                 break;
             default:
                 return {api: "not found"};
