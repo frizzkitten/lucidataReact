@@ -85,7 +85,7 @@ class Sports extends Component {
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    AUSTIN_NUMBER, // phone number to send sms to
+                    PRODUCTION_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {

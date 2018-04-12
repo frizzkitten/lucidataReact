@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
 import sendSms from "../app/lib/sendSms";
+import getLocation from "../app/lib/getLocation";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -42,15 +43,26 @@ class Wikipedia extends Component {
 
 
     // send a text
-    async sendText(message) {
-        const messageToSend = "w," + message;
-
+    async getLocationAndSendText(destination) {
         // show the loading spinner while waiting for response
         this.setState({awaitingText: true});
-        sendSms(messageToSend)
-        .catch(err => {
-            console.log("error sending text: ", error);
+
+        // get the current location
+        getLocation()
+        .then(location => {
+            const latitude = location.coords.latitude.toString();
+            const longitude = location.coords.longitude.toString();
+            let messageToSend = "d," + latitude + "," + longitude + ";" + destination;
+
+            // sent the message with the directions info we want
+            sendSms(messageToSend)
+            .catch(err => {
+                console.log("error sending text: ", error);
+            })
         })
+        .catch(error => {
+            console.log("error getting location info: ", error);
+        });
     }
 
 
@@ -77,16 +89,26 @@ class Wikipedia extends Component {
         // initially, wikipedia information will be empty
         let wikiInfo = null;
         let messages = this.props.messages;
+        let directionsHtml = null;
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
-            if (message.api === "wikipedia") {
+            if (message.api === "directions") {
                 // if it is wikipedia type, show it as the info
-                wikiInfo = (
-                    <Text>
-                        {message.info}
-                    </Text>
-                );
+                if (Array.isArray(message.directionsList)){
+                    directionsHtml = message.directionsList.map(direction => {
+                        return (
+                            <View>
+                                <Text>
+                                    <Text style={styles.bold}>Distance:</Text> {direction.distance}
+                                </Text>
+                                <Text>
+                                    {direction.info}
+                                </Text>
+                            </View>
+                        );
+                    });
+                }
                 // can only have one wikipedia info section showing at a time
                 break;
             }
@@ -94,15 +116,15 @@ class Wikipedia extends Component {
 
         return (
             <View style={styles.container}>
-                { wikiInfo }
+                { directionsHtml }
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(searchTerm) => this.setState({searchTerm})}
                     value={this.state.searchTerm}
                 />
                 <Button
-                    onPress={() => this.sendText(this.state.searchTerm)}
-                    title="Search Wikipedia"
+                    onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
+                    title="Find Directions"
                     color="#841584"
                 />
                 {this.state.awaitingText ?
@@ -118,12 +140,16 @@ class Wikipedia extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    bold: {
+        fontWeight: 'bold'
+    }
+
 });
 
 function mapDispatchToProps(dispatch) {
