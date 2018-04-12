@@ -1,8 +1,20 @@
 import React from 'React';
 import parseSms from '../app/lib/parseSms';
 
+it('Should fail and find none because we sent incorrect type', () => {
+    let input = 5000;
+    let output = parseSms(input);
+    expect(output).toEqual({api: 'not found'});
+});
+
 it('Should fail and find none because we send garbage', () => {
     let input = "xyaa;lsfdl;jaf;lsjf;f;lsdfjasfdfdfdffdf43493434";
+    let output = parseSms(input);
+    expect(output).toEqual({api: 'not found'});
+});
+
+it('Should fail and find none because we send too small weather message', () => {
+    let input = "f";
     let output = parseSms(input);
     expect(output).toEqual({api: 'not found'});
 });

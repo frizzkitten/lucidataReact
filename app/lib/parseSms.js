@@ -18,7 +18,6 @@ export default function parseSms(message) {
                     info = message.substring(API_TYPE_INDEX + 2);
                 }
                 return {api: "wikipedia", info: info};
-                break;
             case "d":
                 let directionsList = [];
                 // if the message has info in it, return that info
@@ -43,7 +42,6 @@ export default function parseSms(message) {
                     });
                 }
                 return {api: "directions", directionsList: directionsList};
-                break;
             case "f":
                 // if the message has info in it, return that info
                 if (message.length > API_TYPE_INDEX + 2) {
@@ -61,7 +59,6 @@ export default function parseSms(message) {
                                 // });
                                 //return {api: "weather", weatherType: "Alerts", alerts: weatherPostFormat};
                                 return {api: "weather", weatherType: "Alerts", alerts: onlyContent.split("/")}
-                                break;
                             case "2":
                                 const hoursPreFormat = onlyContent.split("/");
                                 // get current hour of the day
@@ -109,7 +106,6 @@ export default function parseSms(message) {
                                     }
                                 });
                                 return {api: "weather", weatherType: "24 Hour", infoArr: hoursInfoArr};
-                                break;
                             case "7":
                                 const daysPreFormat = onlyContent.split("/");
                                 // current day is first
@@ -157,7 +153,6 @@ export default function parseSms(message) {
                                     }
                                 });
                                 return {api: "weather", weatherType: "7 Day", infoArr: daysInfoArr};
-                                break;
                             default:
                                 // if weather type is not one of these, can't parse
                                 return {api: "not found"};
@@ -188,13 +183,10 @@ export default function parseSms(message) {
                 else {
                     return {api: "not found"};
                 }
-                break;
             case "s":
                 return {api: "sports", data: message};
-                break;
             default:
                 return {api: "not found"};
-                break;
         }
 
     }
