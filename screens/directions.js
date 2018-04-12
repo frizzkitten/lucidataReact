@@ -43,15 +43,26 @@ class Wikipedia extends Component {
 
 
     // send a text
-    async sendText(message) {
-        const messageToSend = "d," + message;
-
+    async getLocationAndSendText(destination) {
         // show the loading spinner while waiting for response
         this.setState({awaitingText: true});
-        sendSms(messageToSend)
-        .catch(err => {
-            console.log("error sending text: ", error);
+
+        // get the current location
+        getLocation()
+        .then(location => {
+            const latitude = location.coords.latitude.toString();
+            const longitude = location.coords.longitude.toString();
+            let messageToSend = "d," + latitude + "," + longitude + ";" + destination;
+
+            // sent the message with the directions info we want
+            sendSms(messageToSend)
+            .catch(err => {
+                console.log("error sending text: ", error);
+            })
         })
+        .catch(error => {
+            console.log("error getting location info: ", error);
+        });
     }
 
 
@@ -75,14 +86,6 @@ class Wikipedia extends Component {
 
 
     render() {
-        // getLocation()
-        // .then(location => {
-        //     console.log("location in direction.js: ", location);
-        // })
-        // .catch(error => {
-        //     console.log("error getting location info: ", error);
-        // });
-
         // initially, wikipedia information will be empty
         let wikiInfo = null;
         let messages = this.props.messages;
@@ -120,7 +123,7 @@ class Wikipedia extends Component {
                     value={this.state.searchTerm}
                 />
                 <Button
-                    onPress={() => this.sendText(this.state.searchTerm)}
+                    onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
                     title="Find Directions"
                     color="#841584"
                 />
