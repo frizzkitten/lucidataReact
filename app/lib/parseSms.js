@@ -15,16 +15,16 @@ export default function parseSms(message) {
                 let info = "No info found about that topic :(";
                 // if the message has info in it, return that info
                 if (message.length > API_TYPE_INDEX + 2) {
-                    info = message.substring(API_TYPE_INDEX + 1);
+                    info = message.substring(API_TYPE_INDEX + 2);
                 }
                 return {api: "wikipedia", info: info};
                 break;
             case "d":
                 let directionsList = [];
                 // if the message has info in it, return that info
-                if (message.length > COMMA_INDEX + 2) {
+                if (message.length > API_TYPE_INDEX + 2) {
                     // the message without the comma, so only relevant information
-                    const noCommaMessage = message.substring(API_TYPE_INDEX + 1);
+                    const noCommaMessage = message.substring(API_TYPE_INDEX + 2);
                     // split into a list of non-formatted directions
                     const directionsPreFormat = noCommaMessage.split(";");
                     // split each direction into a mile amount and then information

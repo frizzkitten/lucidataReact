@@ -8,9 +8,9 @@ it('Should choose wikipedia', () => {
 });
 
 it('Should choose weather', () => {
-    let input = "fabdfdfde";
+    let input = "f2/cloudy;45;snow;0.25/sunny;56/partly-cloud;46;rain;0.1";
     let output = parseSms(input);
-    expect(output).toEqual({api: "weather", data: input});
+    expect(output).toMatchObject({api: "weather"});
 });
 
 it('Should choose directions', () => {
