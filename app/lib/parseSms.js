@@ -189,7 +189,7 @@ export default function parseSms(message) {
                 break;
             case "s":
                 return {api: "sports", data: message};
-                return;
+                break;
             default:
                 return {api: "not found"};
                 break;
