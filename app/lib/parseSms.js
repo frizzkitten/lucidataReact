@@ -162,20 +162,22 @@ export default function parseSms(message) {
                                 // if weather type is not one of these, can't parse
                                 return {api: "not found"};
                         }
-                        // split each direction into a mile amount and then information
-                        directionsList = directionsPreFormat.map(direction => {
-                            let distance = "";
-                            let info = "";
-                            try {
-                                const distanceStart = 1;
-                                const distanceEnd = direction.indexOf(')');
-                                distance = direction.substring(distanceStart, distanceEnd);
-                                info = direction.substring(distanceEnd + 1);
-                            } catch (err) {
-                                return {};
-                            }
-                            return { distance, info };
-                        });
+
+/* TODO: Austin did you mean to put this here? */
+                    //     // split each direction into a mile amount and then information
+                    //     directionsList = directionsPreFormat.map(direction => {
+                    //         let distance = "";
+                    //         let info = "";
+                    //         try {
+                    //             const distanceStart = 1;
+                    //             const distanceEnd = direction.indexOf(')');
+                    //             distance = direction.substring(distanceStart, distanceEnd);
+                    //             info = direction.substring(distanceEnd + 1);
+                    //         } catch (err) {
+                    //             return {};
+                    //         }
+                    //         return { distance, info };
+                    //     });
                     }
                     catch (parseError) {
                         console.log("error parsing weather info: ", parseError);
