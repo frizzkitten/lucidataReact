@@ -77,16 +77,26 @@ class Wikipedia extends Component {
         // initially, wikipedia information will be empty
         let wikiInfo = null;
         let messages = this.props.messages;
+        let directionsHtml = null;
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
             if (message.api === "directions") {
                 // if it is wikipedia type, show it as the info
-                wikiInfo = (
-                    <Text>
-                        {message.info}
-                    </Text>
-                );
+                if (Array.isArray(message.directionsList)){
+                    directionsHtml = message.directionsList.map(direction => {
+                        return (
+                            <View>
+                                <Text>
+                                    <Text style={styles.bold}>Distance:</Text> {direction.distance}
+                                </Text>
+                                <Text>
+                                    {direction.info}
+                                </Text>
+                            </View>
+                        );
+                    });
+                }
                 // can only have one wikipedia info section showing at a time
                 break;
             }
@@ -94,7 +104,7 @@ class Wikipedia extends Component {
 
         return (
             <View style={styles.container}>
-                { wikiInfo }
+                { directionsHtml }
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(searchTerm) => this.setState({searchTerm})}
@@ -118,12 +128,16 @@ class Wikipedia extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    bold: {
+        fontWeight: 'bold'
+    }
+
 });
 
 function mapDispatchToProps(dispatch) {
