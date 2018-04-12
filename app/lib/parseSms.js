@@ -44,6 +44,8 @@ export default function parseSms(message) {
                 }
                 return {api: "directions", directionsList: directionsList};
                 break;
+                case "s":
+                    return {api: "sports", data: message};
             default:
                 return {api: "not found"};
                 break;
