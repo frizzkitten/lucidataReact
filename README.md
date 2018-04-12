@@ -3,13 +3,12 @@ Lucidata SMS app for CS506, built with React Native.
 
 ## Development Environment
 This will give a (hopefully) complete guide to setting up this repo for development.
-1. Setup NodeJs, recommended to use NVM to do so
-2. Clone the repo and run either `yarn` or `npm install`, depending if you had yarn on your machine
+1. Setup your machine following information from the React Native team [here](https://facebook.github.io/react-native/docs/getting-started.html)
+2. Clone the repo and run `npm install`
 3. Run `react-native link` to link the plugins
-4. Follow the instructions from React Native to be able to run on your phone/in browser: https://facebook.github.io/react-native/docs/getting-started.html
-5. Another link that may be useful is https://medium.com/software-research/setting-up-react-native-with-expo-typescript-jest-and-visual-studio-code-f05cda9763a3
+4. Run `react-native run-android` to have it run on your device
+    - Note: there is also `react-native start`, but we have been unsuccessful getting that functional with this or any other repo (so it's probably an issue with our machine setup). If you have used React Native before there's a decent chance it will work for you.
 
 ## Testing
-- Unit tests are run with the `yarn test` command.
-- (Not yet automated) ability to send and receive SMS.  Have to build and deploy the project on a phone and send/receive with that device.
-
+- Unit tests are run with `npm test`.
+- Coverage is generated with `npm run coverage`.
