@@ -1,5 +1,8 @@
 # lucidataReact
-Lucidata SMS app for CS506, built with React Native.
+Lucidata SMS app for CS506, built with React Native.  
+*Disclaimer: we are not artists or designers, sorry if the app hurts your eyes*  
+
+![Screenshot of Homepage](https://github.com/frizzkitten/lucidataReact/blob/master/pics/homepage.png)
 
 ## Development Environment
 This will give a (hopefully) complete guide to setting up this repo for development.
