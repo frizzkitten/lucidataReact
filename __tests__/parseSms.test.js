@@ -26,31 +26,31 @@ it('Should correctly remove the trial account message', () => {
 });
 
 it('Should choose wikipedia', () => {
-    let input = "w,sfdff";
+    let input = "wwords from wikipedia";
     let output = parseSms(input);
-    expect(output).toEqual({api: "wikipedia", info: input.substring(2)});
+    expect(output).toEqual({api: "wikipedia", info: input.substring(1)});
 });
 
 it('Should choose 24 Hour weather', () => {
-    let input = "f2/cloudy;45;snow;0.25/sunny;56/partly-cloud;46;rain;0.1";
+    let input = "f2cloudy;45;snow;0.25/sunny;56/partly-cloud;46;rain;0.1";
     let output = parseSms(input);
     expect(output).toMatchObject({api: "weather", weatherType: "24 Hour"});
 });
 
 it('Should choose 7 day weather', () => {
-    let input = "f7/cloudy;45;35;snow;0.25/sunny;59;45";
+    let input = "f7cloudy;45;35;snow;0.25/sunny;59;45";
     let output = parseSms(input);
     expect(output).toMatchObject({api: "weather", weatherType: "7 Day"});
 });
 
 it('Should choose alert weather', () => {
-    let input = "fa/alerting you//I'm alerting you again";
+    let input = "faalerting you//I'm alerting you again";
     let output = parseSms(input);
     expect(output).toMatchObject({api: "weather", weatherType: "Alerts"});
 });
 
 it('Should choose directions', () => {
-    let input = "d(1.2 mi);description";
+    let input = "d(1.2 mi)description;(2.1 ft)other description";
     let output = parseSms(input);
     expect(output).toMatchObject({api: "directions"});
 });
