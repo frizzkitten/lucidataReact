@@ -6,6 +6,10 @@ export default function sendSms(messageToSend) {
         const PRODUCTION_NUMBER = '3312156629';
         const AUSTIN_NUMBER = '9522502550';
 
+        if (messageToSend == "") {
+            reject(false);
+        }
+
         try {
             // see if we have permission to send a text
             const granted = await PermissionsAndroid.request(
