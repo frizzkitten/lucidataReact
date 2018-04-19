@@ -15,7 +15,7 @@ export default function parseSms(message) {
                 let info = "No info found about that topic :(";
                 // if the message has info in it, return that info
                 if (message.length > API_TYPE_INDEX + 2) {
-                    info = message.substring(API_TYPE_INDEX + 2);
+                    info = message.substring(API_TYPE_INDEX + 1);
                 }
                 return {api: "wikipedia", info: info};
             case "d":
