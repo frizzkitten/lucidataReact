@@ -7,6 +7,6 @@ const location = {
 
 export default function getLocation() {
     return new Promise(async (resolve, reject) => {
-        resolve(location);
+        process.nextTick(() => resolve(location));
     });
 };

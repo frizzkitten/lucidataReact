@@ -46,23 +46,7 @@ class Wikipedia extends Component {
     async getLocationAndSendText(destination) {
         // show the loading spinner while waiting for response
         this.setState({awaitingText: true});
-
-        // get the current location
-        getLocation()
-        .then(location => {
-            const latitude = location.coords.latitude.toString();
-            const longitude = location.coords.longitude.toString();
-            let messageToSend = "d," + latitude + "," + longitude + ";" + destination;
-
-            // sent the message with the directions info we want
-            sendSms(messageToSend)
-            .catch(err => {
-                console.log("error sending text: ", error);
-            })
-        })
-        .catch(error => {
-            console.log("error getting location info: ", error);
-        });
+        getLocationAndSendText(destination);
     }
 
 
@@ -161,5 +145,25 @@ function mapStateToProps(state) {
         messages: state.messages
     }
 }
+
+export const getLocationAndSendText = (destination) => {
+      // get the current location
+      getLocation()
+      .then(location => {
+          const latitude = location.coords.latitude.toString();
+          const longitude = location.coords.longitude.toString();
+          let messageToSend = "d," + latitude + "," + longitude + ";" + destination;
+          console.log(messageToSend)
+          // sent the message with the directions info we want
+          sendSms(messageToSend)
+          .catch(err => {
+              console.log("error sending text: ", error);
+          })
+      })
+      .catch(error => {
+          console.log("error getting location info: ", error);
+      });
+};
+ 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wikipedia);
