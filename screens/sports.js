@@ -132,7 +132,7 @@ class Sports extends Component {
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
             let message = messages[messageIndex];
-            if (message.api === "wikipedia") {
+            if (message.api === "sports") {
                 // if it is wikipedia type, show it as the info
                 wikiInfo = (
                     <Text>
@@ -154,7 +154,7 @@ class Sports extends Component {
                 />
                 <Button
                     onPress={() => this.sendText(this.state.searchTerm)}
-                    title="Search Wikipedia"
+                    title="Check Games"
                     color="#841584"
                 />
                 {this.state.awaitingText ?
