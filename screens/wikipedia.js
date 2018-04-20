@@ -46,8 +46,8 @@ class Wikipedia extends Component {
         const messageToSend = "w" + message;
 
         if (message != "") {
-        // show the loading spinner while waiting for response
-            this.setState({awaitingText: true});
+            // show the loading spinner while waiting for response
+            this.props.setAwaitingText(true);
             sendSms(messageToSend)
             .catch(err => {
                 console.log("error sending text: ", error);
@@ -55,25 +55,6 @@ class Wikipedia extends Component {
         } else {
             console.log("Wiki: message empty");
         }
-    }
-
-
-    componentDidMount() {
-        // rename 'this' so we can use it in callbacks
-        let self = this;
-
-        // listen for new messages
-        SmsListener.addListener(message => {
-            let parsedMessage = parseSms(message.body);
-            console.log("parsed message is: ", parsedMessage);
-
-            // add the message to redux state's messages array if it has valid info
-            if (parsedMessage && parsedMessage.api !== "not found") {
-                this.props.addMessage(parsedMessage);
-            }
-
-            self.setState({awaitingText: false});
-        })
     }
 
 
@@ -112,7 +93,7 @@ class Wikipedia extends Component {
                 <Text>
                     {"Enter anything you want to search wikipedia for!"}
                 </Text>
-                {this.state.awaitingText ?
+                {this.props.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />
                 :
@@ -139,7 +120,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        messages: state.messages
+        messages: state.messages,
+        awaitingText: state.awaitingText
     }
 }
 

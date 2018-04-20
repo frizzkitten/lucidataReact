@@ -5,6 +5,7 @@ export default function sendSms(messageToSend) {
     return new Promise(async (resolve, reject) => {
         const PRODUCTION_NUMBER = '3312156629';
         const AUSTIN_NUMBER = '9522502550';
+        const KEVIN_NUMBER = '+17153387410';
 
         if (messageToSend == "") {
             reject(false);
@@ -24,7 +25,7 @@ export default function sendSms(messageToSend) {
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    PRODUCTION_NUMBER, // phone number to send sms to
+                    KEVIN_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {

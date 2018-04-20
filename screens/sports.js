@@ -88,7 +88,7 @@ class Sports extends Component {
                     month: month,
                     day: day}}, function() {
                         console.log("Set date to :", this.state.selectedDate);
-                    });              
+                    });
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -107,41 +107,13 @@ class Sports extends Component {
             const messageToSend = "s" + message[0] + dateString;
             console.log(messageToSend);
             // show the loading spinner while waiting for response
-            this.setState({awaitingText: true});
+            this.props.setAwaitingText(true);
             sendSms(messageToSend);
         } else {
             console.log("Not valid sport, msg:", message);
         }
     }
 
-
-    componentDidMount() {
-        // rename 'this' so we can use it in callbacks
-        let self = this;
-
-        // listen for new messages
-        SmsListener.addListener(message => {
-            let parsedMessage = parseSms(message.body);
-            // add the message to redux state's messages array if it has valid info
-            if (!parsedMessage || parsedMessage.api === "not found") {
-                this.props.addMessage(message);
-            }
-
-            self.setState({awaitingText: false});
-        })
-    }
-
-    FlatListItemSeparator = () => {
-        return (
-          <View
-            style={{
-              height: 1,
-              width: "100%",
-              backgroundColor: "#607D8B",
-            }}
-          />
-        );
-    }
 
     render() {
         let gameList = [];
@@ -182,7 +154,7 @@ class Sports extends Component {
                 <Text>
                     {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores followed by your chosen day, e.g. 20180115 for the 15th of January"}
                 </Text>
-                {this.state.awaitingText ?
+                {this.props.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />
                 :
@@ -209,7 +181,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        messages: state.messages
+        messages: state.messages,
+        awaitingText: state.awaitingText
     }
 }
 

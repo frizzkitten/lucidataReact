@@ -11,3 +11,10 @@ export function addMessage(message) {
         message: message
     }
 }
+
+export function setAwaitingText(awaitingText) {
+    return {
+        type: "SET_AWAITING_TEXT",
+        awaitingText: awaitingText
+    }
+}

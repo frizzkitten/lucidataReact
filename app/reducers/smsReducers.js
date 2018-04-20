@@ -19,3 +19,9 @@ export const messages = createReducer([], {
         return newMessages;
     }
 });
+
+export const awaitingText = createReducer([], {
+    "SET_AWAITING_TEXT"(state, action) {
+        return action.awaitingText;
+    }
+})
