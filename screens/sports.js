@@ -85,7 +85,7 @@ class Sports extends Component {
                   day: day
               }
               console.log("Set date to :", this.state.selectedDate);
-              
+
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -111,8 +111,8 @@ class Sports extends Component {
                 console.log("Permission to send sms granted")
 
                 if (validSports.indexOf(message[0]) != -1) {
-                    const dateString = "" + this.state.selectedDate.year + 
-                        this.state.selectedDate.month + this.state.selectedDate.day;                 
+                    const dateString = "" + this.state.selectedDate.year +
+                        this.state.selectedDate.month + this.state.selectedDate.day;
                     const messageToSend = "s" + message[0] + dateString;
                     console.log(messageToSend);
                     // show the loading spinner while waiting for response
@@ -200,8 +200,9 @@ class Sports extends Component {
                     title="Set Date"
                     color="#841584"
                 />
-                <Text> Send 'b' for NBA scores, 'f' for NFL scores, 'h' for
-                    NHL scores, or 'm' for MLB scores followed by your chosen day, e.g. 20180115 for the 15th of January</Text>
+                <Text>
+                    {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores followed by your chosen day, e.g. 20180115 for the 15th of January"}
+                </Text>
                 {this.state.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />

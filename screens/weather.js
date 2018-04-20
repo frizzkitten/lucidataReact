@@ -199,7 +199,7 @@ class Weather extends Component {
                     color="#841584"
                 />
                 <Text>
-                    Enter address or leave blank to use your current location.
+                    {"Enter address or leave blank to use your current location."}
                 </Text>
                 {this.state.awaitingText ?
                     // show loading spinner if we're waiting on a text

@@ -109,6 +109,9 @@ class Wikipedia extends Component {
                     title="Search Wikipedia"
                     color="#841584"
                 />
+                <Text>
+                    {"Enter anything you want to search wikipedia for!"}
+                </Text>
                 {this.state.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />
