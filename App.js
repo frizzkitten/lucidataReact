@@ -57,6 +57,7 @@ class HomeScreen extends Component {
             <View style={{flex: 1}}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>Lucidata</Text>
+                    <Text>{"Make sure to mute notifications from the Lucidata phone number in your default SMS application"}</Text>
                 </View>
                 <View style={{flex: 2, flexDirection: 'row'}}>
                     <View style={styles.container}>
