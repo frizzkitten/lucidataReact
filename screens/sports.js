@@ -16,6 +16,7 @@ import { bindActionCreators } from 'redux';
 
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
+import sendSms from "../app/lib/sendSms";
 
 import {DatePickerAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
@@ -94,54 +95,20 @@ class Sports extends Component {
 
     // send a text
     async sendText(message) {
-        const PRODUCTION_NUMBER = '3312156629';
-        const AUSTIN_NUMBER = '9522502550';
         const validSports = "bfhmBFHM";
 
-        try {
-            // see if we have permission to send a text
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.SEND_SMS,
-                {
-                    'title': 'Lucidata Send SMS Permission',
-                    'message': 'Lucidata needs SMS permission in order to communicate with the server.'
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("Permission to send sms granted")
-
-                if (validSports.indexOf(message[0]) != -1) {
-                    const dateString = "" + this.state.selectedDate.year +
-                        this.state.selectedDate.month + this.state.selectedDate.day;
-                    const messageToSend = "s" + message[0] + dateString;
-                    console.log(messageToSend);
-                    // show the loading spinner while waiting for response
-                    this.setState({awaitingText: true});
-
-                    // if we have permission, send the text
-                    SmsAndroid.sms(
-                        PRODUCTION_NUMBER, // phone number to send sms to
-                        messageToSend, // sms body
-                        'sendDirect', // sendDirect or sendIndirect
-                        (err, message) => {
-                            if (err){
-                                console.log("error: ", err);
-                            } else {
-                                // text successfully send
-                                console.log("callback message: ", message); // callback message
-                            }
-                        }
-                    );
-                } else {
-                    console.log("Not valid sport, msg:", message);
-                }
-            }
-            // if we don't have permission, just log that we don't
-            else {
-                console.log("SMS permission denied")
-            }
-        } catch (err) {
-            console.warn("error from try catch: ", err)
+        // check if the entered sport is valid. if the index of the entered
+        // sport is -1, it is invalid
+        if (validSports.indexOf(message[0]) != -1) {
+            const dateString = "" + this.state.selectedDate.year +
+                this.state.selectedDate.month + this.state.selectedDate.day;
+            const messageToSend = "s" + message[0] + dateString;
+            console.log(messageToSend);
+            // show the loading spinner while waiting for response
+            this.setState({awaitingText: true});
+            sendSms(messageToSend);
+        } else {
+            console.log("Not valid sport, msg:", message);
         }
     }
 
