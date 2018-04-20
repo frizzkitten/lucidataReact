@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Button,
+  Flatlist,
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -17,6 +18,7 @@ import { bindActionCreators } from 'redux';
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
 import sendSms from "../app/lib/sendSms";
+
 
 import {DatePickerAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
@@ -129,29 +131,39 @@ class Sports extends Component {
         })
     }
 
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#607D8B",
+            }}
+          />
+        );
+    }
 
     render() {
-        // initially, wikipedia information will be empty
-        let wikiInfo = null;
+        let gameList = [];
         let messages = this.props.messages;
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
             let message = messages[messageIndex];
             if (message.api === "sports") {
                 // if it is wikipedia type, show it as the info
-                wikiInfo = (
-                    <Text>
-                        {message.info}
-                    </Text>
-                );
-                // can only have one wikipedia info section showing at a time
-                break;
+                const games = parseSports(message.data);
+                gameList = gameList.concat(games);
+
             }
+        }
+
+        // add keys so react-native shuts up
+        for (i in gameList) {
+            gameList[i].key = i;
         }
 
         return (
             <View style={styles.container}>
-                { wikiInfo }
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(searchTerm) => this.setState({searchTerm})}
