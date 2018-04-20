@@ -9,10 +9,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import Wikipedia from "./screens/wikipedia";
-import Weather from "./screens/weather";
-import Directions from "./screens/directions";
-import Sports from "./screens/sports";
+
+import Routes from "./routes.js";
 
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
@@ -39,66 +37,6 @@ function configureStore(initialState) {
 
 const store = configureStore({});
 
-
-class HomeScreen extends Component {
-    render() {
-        const screens = ["Wikipedia", "Weather", "Directions", "Sports"];
-        const buttons = screens.map(screen => {
-            return (
-                <Button key={screen}
-                    style={styles.screenSwitchButton}
-                    title={screen}
-                    onPress={() => this.props.navigation.navigate(screen)}
-                />
-            )
-        });
-
-        return (
-            <View style={{flex: 1}}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>Lucidata</Text>
-                    <Text>{"Make sure to mute notifications from the Lucidata phone number in your default SMS application"}</Text>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                    <View style={styles.container}>
-                     { buttons[0] }
-                    </View>
-                    <View style={styles.container}>
-                     { buttons[1] }
-                    </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={styles.container}>
-                     { buttons[2] }
-                    </View>
-                    <View style={styles.container}>
-                     { buttons[3] }
-                    </View>
-                </View>    
-            </View>
-        );
-    }
-}
-
-
-const RootStack = StackNavigator(
-    {
-        Home: { screen: HomeScreen },
-        Wikipedia: { screen: Wikipedia },
-        Weather: { screen: Weather },
-        Sports: { screen: Sports },
-        Directions: { screen: Directions },
-    },
-    {
-        initialRouteName: "Home"
-    }
-);
-
-class Routes extends React.Component {
-    render() {
-        return <RootStack />;
-    }
-}
 
 const App = () => (
     <Provider store={store}>

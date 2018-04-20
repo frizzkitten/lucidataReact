@@ -19,3 +19,9 @@ export const messages = createReducer([], {
         return newMessages;
     }
 });
+
+export const isWaiting = createReducer([], {
+    "SET_WAITING_STATUS"(state, action) {
+        return action.isWaiting;
+    }
+})

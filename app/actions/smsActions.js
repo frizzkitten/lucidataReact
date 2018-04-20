@@ -11,3 +11,10 @@ export function addMessage(message) {
         message: message
     }
 }
+
+export function setWaitingStatus(isWaiting) {
+    return {
+        type: "SET_WAITING_STATUS",
+        isWaiting: isWaiting
+    }
+}
