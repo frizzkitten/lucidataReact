@@ -45,7 +45,7 @@ class Weather extends Component {
     // send a text
     async getLocationAndSendText(destination, updateType) {
         // show the loading spinner while waiting for response
-        this.setState({awaitingText: true});
+        this.props.setAwaitingText(true);
 
         // if destination not entered, use current location
         if (destination === "") {
@@ -75,25 +75,6 @@ class Weather extends Component {
                 console.log("error sending text: ", error);
             })
         }
-    }
-
-
-    componentDidMount() {
-        // rename 'this' so we can use it in callbacks
-        let self = this;
-
-        // listen for new messages
-        SmsListener.addListener(message => {
-            let parsedMessage = parseSms(message.body);
-            console.log("parsed message is: ", parsedMessage);
-
-            // add the message to redux state's messages array if it has valid info
-            if (parsedMessage && parsedMessage.api !== "not found") {
-                this.props.addMessage(parsedMessage);
-            }
-
-            self.setState({awaitingText: false});
-        })
     }
 
 
@@ -201,7 +182,7 @@ class Weather extends Component {
                 <Text>
                     {"Enter address or leave blank to use your current location."}
                 </Text>
-                {this.state.awaitingText ?
+                {this.props.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />
                 :
@@ -232,7 +213,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        messages: state.messages
+        messages: state.messages,
+        awaitingText: state.awaitingText
     }
 }
 

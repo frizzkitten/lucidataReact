@@ -35,7 +35,7 @@ function configureStore(initialState) {
     return createStore(reducer, initialState, enhancer);
 }
 
-const store = configureStore({});
+const store = configureStore({awaitingText: false});
 
 
 const App = () => (

@@ -12,9 +12,9 @@ export function addMessage(message) {
     }
 }
 
-export function setWaitingStatus(isWaiting) {
+export function setAwaitingText(awaitingText) {
     return {
-        type: "SET_WAITING_STATUS",
-        isWaiting: isWaiting
+        type: "SET_AWAITING_TEXT",
+        awaitingText: awaitingText
     }
 }

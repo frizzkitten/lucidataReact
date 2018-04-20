@@ -20,8 +20,8 @@ export const messages = createReducer([], {
     }
 });
 
-export const isWaiting = createReducer([], {
-    "SET_WAITING_STATUS"(state, action) {
-        return action.isWaiting;
+export const awaitingText = createReducer([], {
+    "SET_AWAITING_TEXT"(state, action) {
+        return action.awaitingText;
     }
 })
