@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import parseSms from "../app/lib/parseSms";
 import readTexts from "../app/lib/readTexts";
 
+import {DatePickerAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import SmsAndroid from 'react-native-sms-android';
 import SmsListener from 'react-native-android-sms-listener';
@@ -54,17 +55,48 @@ class Sports extends Component {
             console.log("Error getting messages");
         });
 
+        // Initialize to current day to not run into weird errors
+        today = new Date()
         this.state = {
             searchTerm: "",
-            awaitingText: false
+            awaitingText: false,
+            selectedDate: {
+                year: today.getFullYear(),
+                month: today.getMonth() + 1,
+                day: today.getDate()
+            }
         };
     }
 
+    // Allow user to adjust the date they want to see games from using the Android Date menu
+    async setDate() {
+        try {
+            const {action, year, month, day} = await DatePickerAndroid.open({
+              // Use `new Date()` for current date.
+              // May 25 2020. Month 0 is January.
+              date: new Date()
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+              // Selected year, month (0-11) (but need 1-12 for server), day
+              month = month + 1;
+              this.state.selectedDate = {
+                  year: year,
+                  month: month,
+                  day: day
+              }
+              console.log("Set date to :", this.state.selectedDate);
+              
+            }
+          } catch ({code, message}) {
+            console.warn('Cannot open date picker', message);
+          }
+    }
 
     // send a text
     async sendText(message) {
         const PRODUCTION_NUMBER = '3312156629';
         const AUSTIN_NUMBER = '9522502550';
+        const validSports = "bfhmBFHM";
 
         try {
             // see if we have permission to send a text
@@ -78,25 +110,31 @@ class Sports extends Component {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Permission to send sms granted")
 
-                const messageToSend = "w," + message;
+                if (validSports.indexOf(message[0]) != -1) {
+                    const dateString = "" + this.state.selectedDate.year + 
+                        this.state.selectedDate.month + this.state.selectedDate.day;                 
+                    const messageToSend = "s" + message[0] + dateString;
+                    console.log(messageToSend);
+                    // show the loading spinner while waiting for response
+                    this.setState({awaitingText: true});
 
-                // show the loading spinner while waiting for response
-                this.setState({awaitingText: true});
-
-                // if we have permission, send the text
-                SmsAndroid.sms(
-                    PRODUCTION_NUMBER, // phone number to send sms to
-                    messageToSend, // sms body
-                    'sendDirect', // sendDirect or sendIndirect
-                    (err, message) => {
-                        if (err){
-                            console.log("error: ", err);
-                        } else {
-                            // text successfully send
-                            console.log("callback message: ", message); // callback message
+                    // if we have permission, send the text
+                    SmsAndroid.sms(
+                        PRODUCTION_NUMBER, // phone number to send sms to
+                        messageToSend, // sms body
+                        'sendDirect', // sendDirect or sendIndirect
+                        (err, message) => {
+                            if (err){
+                                console.log("error: ", err);
+                            } else {
+                                // text successfully send
+                                console.log("callback message: ", message); // callback message
+                            }
                         }
-                    }
-                );
+                    );
+                } else {
+                    console.log("Not valid sport, msg:", message);
+                }
             }
             // if we don't have permission, just log that we don't
             else {
@@ -157,6 +195,13 @@ class Sports extends Component {
                     title="Check Games"
                     color="#841584"
                 />
+                <Button
+                    onPress={() => this.setDate()}
+                    title="Set Date"
+                    color="#841584"
+                />
+                <Text> Send 'b' for NBA scores, 'f' for NFL scores, 'h' for
+                    NHL scores, or 'm' for MLB scores followed by your chosen day, e.g. 20180115 for the 15th of January</Text>
                 {this.state.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />
