@@ -111,6 +111,7 @@ class Direction extends Component {
                     title="Find Directions"
                     color="#841584"
                 />
+                <Text>Choose a location to get directions to</Text>
                 {this.state.awaitingText ?
                     // show loading spinner if we're waiting on a text
                     <ActivityIndicator size="large" color="#0000ff" />

@@ -54,8 +54,7 @@ class Weather extends Component {
             .then(location => {
                 const latitude = location.coords.latitude.toString();
                 const longitude = location.coords.longitude.toString();
-                //let messageToSend = "fc" + updateType + latitude + "," + longitude;
-                let messageToSend = "fa/janguspangus//mckrangus";
+                let messageToSend = "fc" + updateType + latitude + "," + longitude;
 
                 // sent the message with the directions info we want
                 sendSms(messageToSend)
