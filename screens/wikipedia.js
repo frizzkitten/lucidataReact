@@ -43,14 +43,18 @@ class Wikipedia extends Component {
 
     // send a text
     async sendText(message) {
-        const messageToSend = "w," + message;
+        const messageToSend = "w" + message;
 
+        if (message != "") {
         // show the loading spinner while waiting for response
-        this.setState({awaitingText: true});
-        sendSms(messageToSend)
-        .catch(err => {
-            console.log("error sending text: ", error);
-        })
+            this.setState({awaitingText: true});
+            sendSms(messageToSend)
+            .catch(err => {
+                console.log("error sending text: ", error);
+            })
+        } else {
+            console.log("Wiki: message empty");
+        }
     }
 
 
