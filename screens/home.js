@@ -24,7 +24,7 @@ export default class Home extends Component {
             <View style={{flex: 1}}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>Lucidata</Text>
-                    <Text>{"Make sure to mute notifications from the Lucidata phone number in your default SMS application"}</Text>
+                    <Text style={{textAlign: 'center'}}>{"Make sure to mute notifications from the Lucidata phone number in your default SMS application"}</Text>
                 </View>
                 <View style={{flex: 2, flexDirection: 'row'}}>
                     <View style={styles.container}>
@@ -50,7 +50,7 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     screenSwitchButton: {
-        margin: 5
+        margin: 15,
     },
     container: {
         flex: 2,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     titleContainer: {
-        flex: 1,
+        flex: 1.5,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
