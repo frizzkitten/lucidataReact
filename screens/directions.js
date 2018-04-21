@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Button,
+  FlatList,
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -49,59 +50,65 @@ class Direction extends Component {
         getLocationAndSendText(destination);
     }
 
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#607D8B",
+            }}
+          />
+        );
+    }
 
     render() {
-        // initially, wikipedia information will be empty
-        let wikiInfo = null;
         let messages = this.props.messages;
-        let directionsHtml = null;
-        // look through the messages received to see if any are of wikipedia type
+        let directionsList = [];
+        // look through the messages received to see if any are of directions type
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
             if (message.api === "directions") {
-                // if it is wikipedia type, show it as the info
-                if (Array.isArray(message.directionsList)){
-                    directionsHtml = message.directionsList.map(direction => {
-                        return (
-                            <View>
-                                <Text>
-                                    <Text style={styles.bold}>Distance:</Text> {direction.distance}
-                                </Text>
-                                <Text>
-                                    {direction.info}
-                                </Text>
-                            </View>
-                        );
-                    });
-                }
-                // can only have one wikipedia info section showing at a time
-                break;
+                directionsList =  directionsList.concat(message.directionsList);
             }
         }
+        
+        // add keys so react-native shuts up
+        for (i in directionsList) {
+            directionsList[i].key = i;
+        } 
 
         return (
-            <View style={styles.container}>
-                { directionsHtml }
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(searchTerm) => this.setState({searchTerm})}
-                    value={this.state.searchTerm}
-                />
-                <Button
-                    onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
-                    title="Find Directions"
-                    color="#841584"
-                />
-                <Text>
-                    {"Choose a location to get directions to."}
-                </Text>
-                {this.props.awaitingText ?
-                    // show loading spinner if we're waiting on a text
-                    <ActivityIndicator size="large" color="#0000ff" />
-                :
-                    // if not waiting on a text, don't show anything here
-                    null
-                }
+            <View style={{flex:1}}>
+                <View style={styles.flatlist}>
+                    <FlatList
+                    data={directionsList}
+                    ItemSeparatorComponent = {this.FlatListItemSeparator}
+                    renderItem={({item}) => <View><Text style={styles.bold}>{"Distance:   "}{item.distance}</Text><Text style={styles.item}>{item.info}</Text></View>}
+                    />
+                </View>    
+                <View style={styles.container}>
+                    <TextInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                        onChangeText={(searchTerm) => this.setState({searchTerm})}
+                        value={this.state.searchTerm}
+                    />
+                    <Button
+                        onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
+                        title="Find Directions"
+                        color="#841584"
+                    />
+                    <Text>
+                        {"Choose a location to get directions to."}
+                    </Text>
+                    {this.props.awaitingText ?
+                        // show loading spinner if we're waiting on a text
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    :
+                        // if not waiting on a text, don't show anything here
+                        null
+                    }
+                </View>
             </View>
         );
     }
@@ -109,13 +116,21 @@ class Direction extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
     bold: {
         fontWeight: 'bold'
+    },
+    flatlist: {
+        flex: 3
+    },
+    item: {
+        padding: 12,
+        fontSize: 14,
+        height:60
     }
 
 });
