@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
   Button,
-  Flatlist,
+  FlatList,
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -114,6 +114,30 @@ class Sports extends Component {
         }
     }
 
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#607D8B",
+            }}
+          />
+        );
+    }
+
+    formatGame(game) {
+        let msg = game.home + " VS " + game.away;
+        if (game.status == "p") {
+            msg += ": In Progress";
+        } else if (game.status == "f") {
+            msg += ": Final Score " + game.homeScore + "-" + game.awayScore;
+        } else {
+            msg += ": Starts at " + game.status; 
+        }
+
+        return msg;
+    }
 
     render() {
         let gameList = [];
@@ -135,32 +159,41 @@ class Sports extends Component {
         }
 
         return (
-            <View style={styles.container}>
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(searchTerm) => this.setState({searchTerm})}
-                    value={this.state.searchTerm}
-                />
-                <Button
-                    onPress={() => this.sendText(this.state.searchTerm)}
-                    title="Check Games"
-                    color="#841584"
-                />
-                <Button
-                    onPress={() => this.setDate()}
-                    title="Set Date"
-                    color="#841584"
-                />
-                <Text>
-                    {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores followed by your chosen day, e.g. 20180115 for the 15th of January"}
-                </Text>
-                {this.props.awaitingText ?
-                    // show loading spinner if we're waiting on a text
-                    <ActivityIndicator size="large" color="#0000ff" />
-                :
-                    // if not waiting on a text, don't show anything here
-                    null
-                }
+            <View style={{flex: 1}}>
+                <View style={styles.flatlist}>
+                    <FlatList
+                    data={gameList}
+                    ItemSeparatorComponent = {this.FlatListItemSeparator}
+                    renderItem={({item}) => <Text style={styles.item}>{this.formatGame(item)}</Text>}
+                    />
+                </View>
+                <View style={styles.container}>
+                    <TextInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                        onChangeText={(searchTerm) => this.setState({searchTerm})}
+                        value={this.state.searchTerm}
+                    />
+                    <Button
+                        onPress={() => this.sendText(this.state.searchTerm)}
+                        title="Check Games"
+                        color="#841584"
+                    />
+                    <Button
+                        onPress={() => this.setDate()}
+                        title="Set Date"
+                        color="#841584"
+                    />
+                    <Text>
+                        {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores."}
+                    </Text>
+                    {this.props.awaitingText ?
+                        // show loading spinner if we're waiting on a text
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    :
+                        // if not waiting on a text, don't show anything here
+                        null
+                    }
+                </View>
             </View>
         );
     }
@@ -168,10 +201,19 @@ class Sports extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  flatlist: {
+      flex: 2,
+      height:"50%"
+  },
+  item: {
+      padding: 12,
+      fontSize: 14,
+      height: 60
   }
 });
 
