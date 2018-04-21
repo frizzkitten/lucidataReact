@@ -90,7 +90,7 @@ class Wikipedia extends Component {
                     title="Search Wikipedia"
                     color="#841584"
                 />
-                <Text>
+                <Text style={{textAlign: 'center'}}>
                     {"Enter anything you want to search wikipedia for!"}
                 </Text>
                 {this.props.awaitingText ?

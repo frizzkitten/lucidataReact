@@ -183,7 +183,7 @@ class Sports extends Component {
                         title="Set Date"
                         color="#841584"
                     />
-                    <Text>
+                    <Text style={{textAlign: 'center'}}>
                         {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores."}
                     </Text>
                     {this.props.awaitingText ?
