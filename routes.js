@@ -68,11 +68,12 @@ class Routes extends Component {
                 console.log("metaInfo: ", metaInfo);
                 this.setState({
                     api: metaInfo.apiType,
-                    totalNumberTexts: metaInfo.totalNumberTexts
-                },
-                // then set the message that we just got
-                self.addMessageAndMaybeAddToReduxState(metaInfo.currentTextNumber, metaInfo.content)
-                );
+                    totalNumberTexts: metaInfo.totalNumberTexts,
+                    messagesBeingParsed: []
+                }, () => {
+                    // then set the message that we just got
+                    self.addMessageAndMaybeAddToReduxState(metaInfo.currentTextNumber, metaInfo.content)
+                });
             }
             // if we're adding a message that is not the first of its type within the api
             else {
@@ -102,10 +103,10 @@ class Routes extends Component {
                 let messages = this.state.messagesBeingParsed.slice();
 
                 // sort the texts
-                messages.sort(compareTextPlaces);
+                messages.sort(self.compareTextPlaces);
 
                 // make one long message with all the text content
-                let message = this.state.api;
+                let message = self.state.api;
                 messages.forEach(text => {
                     message = message + text.content;
                 })
@@ -116,11 +117,18 @@ class Routes extends Component {
 
                 // add the message to redux state's messages array if it has valid info
                 if (parsedMessage && parsedMessage.api !== "not found") {
-                    this.props.addMessage(parsedMessage);
+                    self.props.addMessage(parsedMessage);
                 }
 
                 // finished waiting for the text, deactivate loading spinner
                 self.props.setAwaitingText(false);
+
+                // no longer need the messages in state, get rid of them
+                self.setState({
+                    messagesBeingParsed: [],
+                    totalNumberTexts: undefined,
+                    api: undefined
+                })
             }
         });
     }
