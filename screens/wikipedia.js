@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Button,
+  FlatList,
   ActivityIndicator
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -57,49 +58,69 @@ class Wikipedia extends Component {
         }
     }
 
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#607D8B",
+            }}
+          />
+        );
+    }
 
     render() {
         // initially, wikipedia information will be empty
-        let wikiInfo = null;
+        let wikiData = [];
         let messages = this.props.messages;
         // look through the messages received to see if any are of wikipedia type
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
             if (message.api === "wikipedia") {
                 // if it is wikipedia type, show it as the info
-                wikiInfo = (
-                    <Text>
-                        {message.info}
-                    </Text>
-                );
-                // can only have one wikipedia info section showing at a time
-                break;
+                wikiData.push(message);
             }
         }
 
+        // add keys so react-native shuts up
+        for (i in wikiData) {
+            wikiData[i].key = i;
+        } 
+
+        console.log(wikiData);
+
         return (
-            <View style={styles.container}>
-                { wikiInfo }
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(searchTerm) => this.setState({searchTerm})}
-                    value={this.state.searchTerm}
-                />
-                <Button
-                    onPress={() => this.sendText(this.state.searchTerm)}
-                    title="Search Wikipedia"
-                    color="#841584"
-                />
-                <Text style={{textAlign: 'center'}}>
-                    {"Enter anything you want to search wikipedia for!"}
-                </Text>
-                {this.props.awaitingText ?
-                    // show loading spinner if we're waiting on a text
-                    <ActivityIndicator size="large" color="#0000ff" />
-                :
-                    // if not waiting on a text, don't show anything here
-                    null
-                }
+            <View style={{flex: 1}}>
+                <View style={styles.flatlist}>
+                    <FlatList
+                    data={wikiData}
+                    ItemSeparatorComponent = {this.FlatListItemSeparator}
+                    renderItem={({item}) => <Text style={styles.item}>{item.info}</Text>}
+                    />
+                </View>          
+                <View style={styles.container}>
+                    <TextInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                        onChangeText={(searchTerm) => this.setState({searchTerm})}
+                        value={this.state.searchTerm}
+                    />
+                    <Button
+                        onPress={() => this.sendText(this.state.searchTerm)}
+                        title="Search Wikipedia"
+                        color="#841584"
+                    />
+                    <Text style={{textAlign: 'center'}}>
+                        {"Enter anything you want to search wikipedia for!"}
+                    </Text>
+                    {this.props.awaitingText ?
+                        // show loading spinner if we're waiting on a text
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    :
+                        // if not waiting on a text, don't show anything here
+                        null
+                    }
+                </View>
             </View>
         );
     }
@@ -107,10 +128,18 @@ class Wikipedia extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  flatlist: {
+      flex: 3
+  },
+  item: {
+      padding: 12,
+      fontSize: 14,
+      height: 60
   }
 });
 
