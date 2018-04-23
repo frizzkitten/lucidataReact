@@ -7,7 +7,8 @@ import {
   View,
   Button,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  Keyboard
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -97,6 +98,9 @@ class Sports extends Component {
 
     // send a text
     async sendText(message) {
+        // hide the keyboard
+        Keyboard.dismiss();
+
         const validSports = "bfhmBFHM";
 
         // check if the entered sport is valid. if the index of the entered

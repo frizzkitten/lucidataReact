@@ -7,7 +7,8 @@ import {
   View,
   Button,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  Keyboard
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -45,6 +46,9 @@ class Direction extends Component {
 
     // send a text
     async getLocationAndSendText(destination) {
+        // hide the keyboard
+        Keyboard.dismiss();
+
         // show the loading spinner while waiting for response
         this.props.setAwaitingText(true);
         getLocationAndSendText(destination);

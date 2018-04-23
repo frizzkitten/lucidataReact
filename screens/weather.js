@@ -7,7 +7,8 @@ import {
   FlatList,
   View,
   Button,
-  ActivityIndicator
+  ActivityIndicator,
+  Keyboard
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -45,6 +46,9 @@ class Weather extends Component {
 
     // send a text
     async getLocationAndSendText(destination, updateType) {
+        // hide the keyboard
+        Keyboard.dismiss();
+
         // show the loading spinner while waiting for response
         this.props.setAwaitingText(true);
 

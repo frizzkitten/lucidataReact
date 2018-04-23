@@ -7,7 +7,8 @@ import {
   View,
   Button,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  Keyboard
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -44,6 +45,9 @@ class Wikipedia extends Component {
 
     // send a text
     async sendText(message) {
+        // hide the keyboard
+        Keyboard.dismiss();
+
         const messageToSend = "w" + message;
 
         if (message != "") {
