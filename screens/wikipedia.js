@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   item: {
       padding: 12,
       fontSize: 14,
-      height: 60
+      height: 120
   }
 });
 
