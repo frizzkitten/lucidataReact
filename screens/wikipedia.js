@@ -86,7 +86,7 @@ class Wikipedia extends Component {
         // add keys so react-native shuts up
         for (i in wikiData) {
             wikiData[i].key = i;
-        } 
+        }
 
         console.log(wikiData);
 
@@ -94,11 +94,11 @@ class Wikipedia extends Component {
             <View style={{flex: 1}}>
                 <View style={styles.flatlist}>
                     <FlatList
-                    data={wikiData}
-                    ItemSeparatorComponent = {this.FlatListItemSeparator}
-                    renderItem={({item}) => <Text style={styles.item}>{item.info}</Text>}
+                        data={wikiData}
+                        ItemSeparatorComponent = {this.FlatListItemSeparator}
+                        renderItem={({item}) => <Text style={styles.item}>{item.info}</Text>}
                     />
-                </View>          
+                </View>
                 <View style={styles.container}>
                     <TextInput
                         style={{height: 40, borderColor: 'gray', borderWidth: 1}}

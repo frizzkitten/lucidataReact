@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  FlatList,
   View,
   Button,
   ActivityIndicator
@@ -78,6 +79,19 @@ class Weather extends Component {
     }
 
 
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#607D8B",
+            }}
+          />
+        );
+    }
+
+
     render() {
         // initially, wikipedia information will be empty
         let wikiInfo = null;
@@ -85,21 +99,25 @@ class Weather extends Component {
         let directionsHtml = null;
 
         try {
-
             // look through the messages received to see if any are of wikipedia type
             for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
                 let message = messages[messageIndex];
                 if (message.api === "weather") {
+                    let keyCounter = 0;
                     switch (message.weatherType) {
                         case "Alerts":
                             // simply write out the list of alerts
                             directionsHtml = message.alerts.map(alert => {
-                                return (
-                                    <Text>
-                                        {alert}
-                                    </Text>
-                                )
-                            });
+                                keyCounter++;
+                                return {
+                                    key: keyCounter.toString(),
+                                    html: (
+                                        <Text>
+                                            {alert}
+                                        </Text>
+                                    )
+                                }
+                            })
                             break;
                         case "24 Hour":
                             directionsHtml = message.infoArr.map(hourInfo => {
@@ -108,18 +126,23 @@ class Weather extends Component {
                                 let temp =  hourInfo.temp ? hourInfo.temp : null;
                                 let precip =  hourInfo.precip ? hourInfo.precip : null;
                                 let precipChance =  hourInfo.precipChance ? hourInfo.precipChance : null;
-                                return (
-                                    <Text>
-                                        Hour: {hour}{"\n"}
-                                        {info}{"\n"}
-                                        Temperature: {temp}{"\n"}
-                                        {precip && precipChance ?
-                                            precipChance + "% chance of " + precip + "\n"
-                                            : null
-                                        }
-                                    </Text>
-                                )
+                                keyCounter++;
+                                return {
+                                    key: keyCounter.toString(),
+                                    html: (
+                                        <Text>
+                                            <Text style={styles.bold}>Hour:</Text> {hour}{"\n"}
+                                            {info}{"\n"}
+                                            <Text style={styles.bold}>Temperature:</Text> {temp}{"\n"}
+                                            {precip && precipChance ?
+                                                precipChance + "% chance of " + precip + "\n"
+                                                : null
+                                            }
+                                        </Text>
+                                    )
+                                }
                             });
+
                             break;
                         case "7 Day":
                             directionsHtml = message.infoArr.map(dayInfo => {
@@ -129,18 +152,22 @@ class Weather extends Component {
                                 let low =  dayInfo.low ? dayInfo.low : null;
                                 let precip =  dayInfo.precip ? dayInfo.precip : null;
                                 let precipChance =  dayInfo.precipChance ? dayInfo.precipChance : null;
-                                return (
-                                    <Text>
-                                        Day: {day}{"\n"}
-                                        {info}{"\n"}
-                                        High: {high}{"\n"}
-                                        Low: {low}{"\n"}
-                                        {precip && precipChance ?
-                                            precipChance + "% chance of " + precip + "\n"
-                                            : null
-                                        }
-                                    </Text>
-                                )
+                                keyCounter++;
+                                return {
+                                    key: keyCounter.toString(),
+                                    html: (
+                                        <Text>
+                                            Day: {day}{"\n"}
+                                            {info}{"\n"}
+                                            High: {high}{"\n"}
+                                            Low: {low}{"\n"}
+                                            {precip && precipChance ?
+                                                precipChance + "% chance of " + precip + "\n"
+                                                : null
+                                            }
+                                        </Text>
+                                    )
+                                }
                             });
                             break;
                         default:
@@ -157,38 +184,47 @@ class Weather extends Component {
         }
 
         return (
-            <View style={styles.container}>
-                { directionsHtml }
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(searchTerm) => this.setState({searchTerm})}
-                    value={this.state.searchTerm}
-                />
-                <Button
-                    onPress={() => this.getLocationAndSendText(this.state.searchTerm, "a")}
-                    title="Get Weather Alerts"
-                    color="#841584"
-                />
-                <Button
-                    onPress={() => this.getLocationAndSendText(this.state.searchTerm, "2")}
-                    title="Get 24 Hour Forecast"
-                    color="#841584"
-                />
-                <Button
-                    onPress={() => this.getLocationAndSendText(this.state.searchTerm, "7")}
-                    title="Get 7 Day Forecast"
-                    color="#841584"
-                />
-                <Text>
-                    {"Enter address or leave blank to use your current location."}
-                </Text>
-                {this.props.awaitingText ?
-                    // show loading spinner if we're waiting on a text
-                    <ActivityIndicator size="large" color="#0000ff" />
-                :
-                    // if not waiting on a text, don't show anything here
-                    null
-                }
+            <View style={{flex: 1}}>
+                <View style={styles.flatlist}>
+                    <FlatList
+                        data= {directionsHtml}
+                        ItemSeparatorComponent = {this.FlatListItemSeparator}
+                        renderItem={({item}) => <Text style={styles.item} key={item.key}>{item.html}</Text>}
+                    />
+                </View>
+                <View style={styles.container}>
+
+                    <TextInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                        onChangeText={(searchTerm) => this.setState({searchTerm})}
+                        value={this.state.searchTerm}
+                    />
+                    <Button
+                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "a")}
+                        title="Get Weather Alerts"
+                        color="#841584"
+                    />
+                    <Button
+                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "2")}
+                        title="Get 24 Hour Forecast"
+                        color="#841584"
+                    />
+                    <Button
+                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "7")}
+                        title="Get 7 Day Forecast"
+                        color="#841584"
+                    />
+                    <Text>
+                        {"Enter address or leave blank to use your current location."}
+                    </Text>
+                    {this.props.awaitingText ?
+                        // show loading spinner if we're waiting on a text
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    :
+                        // if not waiting on a text, don't show anything here
+                        null
+                    }
+                </View>
             </View>
         );
     }
@@ -203,8 +239,18 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: 'bold'
-    }
-
+    },
+    flatlist: {
+        flex: 2
+    },
+    item: {
+        padding: 12,
+        fontSize: 14,
+        height: 120
+    },
+    bold: {
+        fontWeight: 'bold'
+    },
 });
 
 function mapDispatchToProps(dispatch) {
