@@ -80,13 +80,16 @@ class Direction extends Component {
 
         return (
             <View style={{flex:1}}>
-                <View style={styles.flatlist}>
-                    <FlatList
-                    data={directionsList}
-                    ItemSeparatorComponent = {this.FlatListItemSeparator}
-                    renderItem={({item}) => <View><Text style={styles.bold}>{"Distance:   "}{item.distance}</Text><Text style={styles.item}>{item.info}</Text></View>}
-                    />
-                </View>
+                {this.props.keyboardShowing ?
+                    null :
+                    <View style={styles.flatlist}>
+                        <FlatList
+                        data={directionsList}
+                        ItemSeparatorComponent = {this.FlatListItemSeparator}
+                        renderItem={({item}) => <View><Text style={styles.bold}>{"Distance:   "}{item.distance}</Text><Text style={styles.item}>{item.info}</Text></View>}
+                        />
+                    </View>
+                }
                 <View style={styles.container}>
                     <View style={styles.spacedView}>
                         <TextInput

@@ -185,13 +185,16 @@ class Weather extends Component {
 
         return (
             <View style={{flex: 1}}>
-                <View style={styles.flatlist}>
-                    <FlatList
-                        data= {directionsHtml}
-                        ItemSeparatorComponent = {this.FlatListItemSeparator}
-                        renderItem={({item}) => <Text style={styles.item} key={item.key}>{item.html}</Text>}
-                    />
-                </View>
+                {this.props.keyboardShowing ?
+                    null :
+                    <View style={styles.flatlist}>
+                        <FlatList
+                            data= {directionsHtml}
+                            ItemSeparatorComponent = {this.FlatListItemSeparator}
+                            renderItem={({item}) => <Text style={styles.item} key={item.key}>{item.html}</Text>}
+                        />
+                    </View>
+                }
                 <View style={styles.container}>
                     <View style={styles.spacedView}>
                         <TextInput

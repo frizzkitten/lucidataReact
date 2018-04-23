@@ -160,13 +160,16 @@ class Sports extends Component {
 
         return (
             <View style={{flex: 1}}>
-                <View style={styles.flatlist}>
-                    <FlatList
-                    data={gameList}
-                    ItemSeparatorComponent = {this.FlatListItemSeparator}
-                    renderItem={({item}) => <Text style={styles.item}>{this.formatGame(item)}</Text>}
-                    />
-                </View>
+                {this.props.keyboardShowing ?
+                    null :
+                    <View style={styles.flatlist}>
+                        <FlatList
+                        data={gameList}
+                        ItemSeparatorComponent = {this.FlatListItemSeparator}
+                        renderItem={({item}) => <Text style={styles.item}>{this.formatGame(item)}</Text>}
+                        />
+                    </View>
+                }
                 <View style={styles.container}>
                     <View style={styles.spacedView}>
                         <TextInput
