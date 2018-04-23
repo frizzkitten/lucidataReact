@@ -88,7 +88,7 @@ class Wikipedia extends Component {
             wikiData[i].key = i;
         }
 
-        console.log(wikiData);
+        console.log("wikiData: ", wikiData);
 
         return (
             <View style={{flex: 1}}>
@@ -100,19 +100,25 @@ class Wikipedia extends Component {
                     />
                 </View>
                 <View style={styles.container}>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(searchTerm) => this.setState({searchTerm})}
-                        value={this.state.searchTerm}
-                    />
-                    <Button
-                        onPress={() => this.sendText(this.state.searchTerm)}
-                        title="Search Wikipedia"
-                        color="#841584"
-                    />
-                    <Text style={{textAlign: 'center'}}>
-                        {"Enter anything you want to search wikipedia for!"}
-                    </Text>
+                    <View style={styles.spacedView}>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            onChangeText={(searchTerm) => this.setState({searchTerm})}
+                            value={this.state.searchTerm}
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.sendText(this.state.searchTerm)}
+                            title="Search Wikipedia"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Text style={{textAlign: 'center'}}>
+                            {"Enter anything you want to search wikipedia for!"}
+                        </Text>
+                    </View>
                     {this.props.awaitingText ?
                         // show loading spinner if we're waiting on a text
                         <ActivityIndicator size="large" color="#0000ff" />
@@ -140,6 +146,9 @@ const styles = StyleSheet.create({
       padding: 12,
       fontSize: 14,
       height: 120
+  },
+  spacedView: {
+      margin: 5
   }
 });
 

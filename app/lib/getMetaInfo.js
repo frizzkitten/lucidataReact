@@ -30,6 +30,8 @@ export default function getMetaInfo(message) {
 
     const validApis = ["s", "f", "d", "w"];
 
+    console.log("Message is: ", text, "api type is: ", apiType);
+
     // if the api of the text is not valid, return unsuccessfully
     if (!validApis.includes(apiType)) {
         throw "Invalid api.";

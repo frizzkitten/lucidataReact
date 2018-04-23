@@ -210,8 +210,7 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    zIndex: 1
+    backgroundColor: '#F5FCFF'
   },
   flatlist: {
       flex: 2,

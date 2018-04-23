@@ -193,30 +193,39 @@ class Weather extends Component {
                     />
                 </View>
                 <View style={styles.container}>
-
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(searchTerm) => this.setState({searchTerm})}
-                        value={this.state.searchTerm}
-                    />
-                    <Button
-                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "a")}
-                        title="Get Weather Alerts"
-                        color="#841584"
-                    />
-                    <Button
-                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "2")}
-                        title="Get 24 Hour Forecast"
-                        color="#841584"
-                    />
-                    <Button
-                        onPress={() => this.getLocationAndSendText(this.state.searchTerm, "7")}
-                        title="Get 7 Day Forecast"
-                        color="#841584"
-                    />
-                    <Text>
-                        {"Enter address or leave blank to use your current location."}
-                    </Text>
+                    <View style={styles.spacedView}>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            onChangeText={(searchTerm) => this.setState({searchTerm})}
+                            value={this.state.searchTerm}
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.getLocationAndSendText(this.state.searchTerm, "a")}
+                            title="Get Weather Alerts"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.getLocationAndSendText(this.state.searchTerm, "2")}
+                            title="Get 24 Hour Forecast"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.getLocationAndSendText(this.state.searchTerm, "7")}
+                            title="Get 7 Day Forecast"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Text style={styles.centered}>
+                            {"Enter address or leave blank to use your current location."}
+                        </Text>
+                    </View>
                     {this.props.awaitingText ?
                         // show loading spinner if we're waiting on a text
                         <ActivityIndicator size="large" color="#0000ff" />
@@ -241,16 +250,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     flatlist: {
-        flex: 2
+        flex: 1
     },
     item: {
         padding: 12,
         fontSize: 14,
         height: 120
     },
-    bold: {
-        fontWeight: 'bold'
+    spacedView: {
+        margin: 5
     },
+    centered: {
+        textAlign: 'center'
+    }
 });
 
 function mapDispatchToProps(dispatch) {

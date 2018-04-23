@@ -72,11 +72,11 @@ class Direction extends Component {
                 directionsList =  directionsList.concat(message.directionsList);
             }
         }
-        
+
         // add keys so react-native shuts up
         for (i in directionsList) {
             directionsList[i].key = i;
-        } 
+        }
 
         return (
             <View style={{flex:1}}>
@@ -86,21 +86,27 @@ class Direction extends Component {
                     ItemSeparatorComponent = {this.FlatListItemSeparator}
                     renderItem={({item}) => <View><Text style={styles.bold}>{"Distance:   "}{item.distance}</Text><Text style={styles.item}>{item.info}</Text></View>}
                     />
-                </View>    
+                </View>
                 <View style={styles.container}>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(searchTerm) => this.setState({searchTerm})}
-                        value={this.state.searchTerm}
-                    />
-                    <Button
-                        onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
-                        title="Find Directions"
-                        color="#841584"
-                    />
-                    <Text>
-                        {"Choose a location to get directions to."}
-                    </Text>
+                    <View style={styles.spacedView}>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            onChangeText={(searchTerm) => this.setState({searchTerm})}
+                            value={this.state.searchTerm}
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.getLocationAndSendText(this.state.searchTerm)}
+                            title="Find Directions"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Text>
+                            {"Choose a location to get directions to."}
+                        </Text>
+                    </View>
                     {this.props.awaitingText ?
                         // show loading spinner if we're waiting on a text
                         <ActivityIndicator size="large" color="#0000ff" />
@@ -131,6 +137,9 @@ const styles = StyleSheet.create({
         padding: 12,
         fontSize: 14,
         height:60
+    },
+    spacedView: {
+        margin: 5
     }
 
 });
