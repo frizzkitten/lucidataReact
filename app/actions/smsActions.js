@@ -18,3 +18,10 @@ export function setAwaitingText(awaitingText) {
         awaitingText: awaitingText
     }
 }
+
+export function setKeyboardShowing(keyboardShowing) {
+    return {
+        type: "SET_KEYBOARD_SHOWING",
+        keyboardShowing: keyboardShowing
+    }
+}

@@ -35,7 +35,11 @@ function configureStore(initialState) {
     return createStore(reducer, initialState, enhancer);
 }
 
-const store = configureStore({awaitingText: false});
+// initial state of the redux store
+const store = configureStore({
+    awaitingText: false,
+    keyboardShowing: false
+});
 
 
 const App = () => (

@@ -9,6 +9,8 @@ import parseSms from "./app/lib/parseSms";
 import getMetaInfo from "./app/lib/getMetaInfo";
 import SmsListener from 'react-native-android-sms-listener';
 
+import { Keyboard } from 'react-native';
+
 
 // import all the screens
 import Wikipedia from "./screens/wikipedia";
@@ -47,6 +49,10 @@ class Routes extends Component {
         // rename 'this' so we can use it in callbacks
         let self = this;
 
+        // listen for when keyboard is open or hidden
+        self.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', self._keyboardDidShow.bind(self));
+        self.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', self._keyboardDidHide.bind(self));
+
         // listen for new messages
         SmsListener.addListener(message => {
             let metaInfo = undefined;
@@ -82,6 +88,17 @@ class Routes extends Component {
                 self.addMessageAndMaybeAddToReduxState(metaInfo.currentTextNumber, metaInfo.content);
             }
         })
+    }
+
+
+    // tell everything else when the keyboard is showing
+    _keyboardDidShow() {
+        this.props.setKeyboardShowing(true);
+    }
+
+    // tell everything else when the keyboard is hidden
+    _keyboardDidHide() {
+        this.props.setKeyboardShowing(false);
     }
 
 

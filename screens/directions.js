@@ -151,7 +151,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         messages: state.messages,
-        awaitingText: state.awaitingText
+        awaitingText: state.awaitingText,
+        keyboardShowing: state.keyboardShowing
     }
 }
 

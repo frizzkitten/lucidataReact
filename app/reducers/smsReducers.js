@@ -25,3 +25,9 @@ export const awaitingText = createReducer([], {
         return action.awaitingText;
     }
 })
+
+export const keyboardShowing = createReducer([], {
+    "SET_KEYBOARD_SHOWING"(state, action) {
+        return action.keyboardShowing;
+    }
+})

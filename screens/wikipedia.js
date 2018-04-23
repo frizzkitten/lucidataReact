@@ -92,13 +92,16 @@ class Wikipedia extends Component {
 
         return (
             <View style={{flex: 1}}>
-                <View style={styles.flatlist}>
-                    <FlatList
-                        data={wikiData}
-                        ItemSeparatorComponent = {this.FlatListItemSeparator}
-                        renderItem={({item}) => <Text style={styles.item}>{item.info}</Text>}
-                    />
-                </View>
+                {this.props.keyboardShowing ?
+                    null :
+                    <View style={styles.flatlist}>
+                        <FlatList
+                            data={wikiData}
+                            ItemSeparatorComponent = {this.FlatListItemSeparator}
+                            renderItem={({item}) => <Text style={styles.item}>{item.info}</Text>}
+                        />
+                    </View>
+                }
                 <View style={styles.container}>
                     <View style={styles.spacedView}>
                         <TextInput
@@ -159,7 +162,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         messages: state.messages,
-        awaitingText: state.awaitingText
+        awaitingText: state.awaitingText,
+        keyboardShowing: state.keyboardShowing
     }
 }
 
