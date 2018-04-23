@@ -133,7 +133,7 @@ class Sports extends Component {
         } else if (game.status == "f") {
             msg += ": Final Score " + game.homeScore + "-" + game.awayScore;
         } else {
-            msg += ": Starts at " + game.status; 
+            msg += ": Starts at " + game.status;
         }
 
         return msg;
@@ -168,21 +168,27 @@ class Sports extends Component {
                     />
                 </View>
                 <View style={styles.container}>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(searchTerm) => this.setState({searchTerm})}
-                        value={this.state.searchTerm}
-                    />
-                    <Button
-                        onPress={() => this.sendText(this.state.searchTerm)}
-                        title="Check Games"
-                        color="#841584"
-                    />
-                    <Button
-                        onPress={() => this.setDate()}
-                        title="Set Date"
-                        color="#841584"
-                    />
+                    <View style={styles.spacedView}>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            onChangeText={(searchTerm) => this.setState({searchTerm})}
+                            value={this.state.searchTerm}
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.sendText(this.state.searchTerm)}
+                            title="Check Games"
+                            color="#841584"
+                        />
+                    </View>
+                    <View style={styles.spacedView}>
+                        <Button
+                            onPress={() => this.setDate()}
+                            title="Set Date"
+                            color="#841584"
+                        />
+                    </View>
                     <Text style={{textAlign: 'center'}}>
                         {"Send 'b' for NBA scores, 'f' for NFL scores, 'h' for NHL scores, or 'm' for MLB scores."}
                     </Text>
@@ -205,15 +211,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    zIndex: 1
   },
   flatlist: {
       flex: 2,
-      height:"50%"
+      height:"50%",
+      zIndex: 0
   },
   item: {
       padding: 12,
       fontSize: 14,
       height: 60
+  },
+  spacedView: {
+      margin: 5
   }
 });
 

@@ -1,4 +1,18 @@
-export default function getMetaInfo(text) {
+export default function getMetaInfo(message) {
+    let text = message;
+
+    // ensure the text is actually a string
+    if (typeof text !== "string") {
+        throw "Wrong input type";
+        return;
+    }
+
+    // remove the trial account info twilio likes to send
+    let twilioTrialAccountMessage = "Sent from your Twilio trial account - ";
+    if (text.includes(twilioTrialAccountMessage)) {
+        text = text.substring(twilioTrialAccountMessage.length);
+    }
+
     // if the text is invalid
     if (text.length < 4) {
         throw "Text not long enough.";
