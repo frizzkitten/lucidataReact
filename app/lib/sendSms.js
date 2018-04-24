@@ -25,7 +25,7 @@ export default function sendSms(messageToSend) {
 
                 // if we have permission, send the text
                 SmsAndroid.sms(
-                    PRODUCTION_NUMBER, // phone number to send sms to
+                    AUSTIN_NUMBER, // phone number to send sms to
                     messageToSend, // sms body
                     'sendDirect', // sendDirect or sendIndirect
                     (err, message) => {

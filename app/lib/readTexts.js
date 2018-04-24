@@ -14,7 +14,7 @@ export default function readTexts() {
         var filter = {
             box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
             // address: '+97433------', // sender's phone number
-            address: PRODUCTION_NUMBER,
+            address: AUSTIN_NUMBER,
             // the next 2 filters can be used for pagination
             indexFrom: 0, // start from index 0
             maxCount: 10, // count of SMS to return each time
@@ -120,8 +120,12 @@ function combineTexts(smsObjects) {
 
                     // combine the texts if we have the right number of them
                     if (totalNumberTexts === savedTexts.length) {
+                        console.log("savedTexts before sort: ", savedTexts);
+
                         // sort the texts so that they can be combined
                         savedTexts.sort(compareTextPlaces);
+
+                        console.log("savedTexts after sort: ", savedTexts);
 
                         // make one long message with all the text content
                         let combinedMessage = apiType;
@@ -154,10 +158,10 @@ function combineTexts(smsObjects) {
 }
 
 function compareTextPlaces(textObjA, textObjB) {
-    if (textObjA.index < textObjB.index) {
+    if (textObjA.textIndex < textObjB.textIndex) {
         return -1;
     }
-    if (textObjA.index > textObjB.index) {
+    if (textObjA.textIndex > textObjB.textIndex) {
         return 1;
     }
     // if the texts have the same index for some reason
