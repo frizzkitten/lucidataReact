@@ -14,7 +14,7 @@ export default function readTexts() {
         var filter = {
             box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
             // address: '+97433------', // sender's phone number
-            address: AUSTIN_NUMBER,
+            address: PRODUCTION_NUMBER,
             // the next 2 filters can be used for pagination
             indexFrom: 0, // start from index 0
             maxCount: 10, // count of SMS to return each time
