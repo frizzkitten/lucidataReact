@@ -61,6 +61,7 @@ class Sports extends Component {
 
         // Initialize to current day to not run into weird errors
         today = new Date()
+        extendedMonth = (today.getMonth() < 10)? "0" + today.getMonth():today.getMonth();
         this.state = {
             searchTerm: "",
             awaitingText: false,
@@ -70,6 +71,7 @@ class Sports extends Component {
                 day: today.getDate()
             }
         };
+        console.log("State: ", this.state);
     }
 
     // Allow user to adjust the date they want to see games from using the Android Date menu
@@ -83,13 +85,17 @@ class Sports extends Component {
             if (action !== DatePickerAndroid.dismissedAction) {
               // Selected year, month (0-11) (but need 1-12 for server), day
               month = month + 1;
-              this.state.setState({
-                  selectedDate: {
-                    year: year,
-                    month: month,
-                    day: day}}, function() {
-                        console.log("Set date to :", this.state.selectedDate);
-                    });
+              this.state.selectedDate.year = year;
+              this.state.selectedDate.month = (month < 10)? "0" + month: month;
+              this.state.selectedDate.day = day;
+              console.log("Set date to ", this.state.selectedDate)
+            //   this.state.setState({
+            //       selectedDate: {
+            //         year: year,
+            //         month: month,
+            //         day: day}}, function() {
+            //             console.log("Set date to :", this.state.selectedDate);
+            //         });
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -101,14 +107,28 @@ class Sports extends Component {
         // hide the keyboard
         Keyboard.dismiss();
 
-        const validSports = "bfhmBFHM";
+        sportKey = message[0];
+        switch(sportKey) {
+            case "B":
+            case "b": sportKey = "b";
+                break;
+            case "F":
+            case "f": sportKey = "f";
+                break;
+            case "H":
+            case "h": sportKey = "h";
+                break;
+            case "M":
+            case "m": sportKey = "m";
+                break;
+            default:
+                sportKey = "W";
+        }
 
-        // check if the entered sport is valid. if the index of the entered
-        // sport is -1, it is invalid
-        if (validSports.indexOf(message[0]) != -1) {
+        if (sportKey != "W") { 
             const dateString = "" + this.state.selectedDate.year +
                 this.state.selectedDate.month + this.state.selectedDate.day;
-            const messageToSend = "s" + message[0] + dateString;
+            const messageToSend = "s" + sportKey + dateString;
             console.log(messageToSend);
             // show the loading spinner while waiting for response
             this.props.setAwaitingText(true);
@@ -116,6 +136,7 @@ class Sports extends Component {
         } else {
             console.log("Not valid sport, msg:", message);
         }
+
     }
 
     FlatListItemSeparator = () => {
