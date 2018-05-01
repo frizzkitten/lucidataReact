@@ -70,6 +70,7 @@ class Sports extends Component {
                 day: today.getDate()
             }
         };
+        console.log("State: ", this.state);
     }
 
     // Allow user to adjust the date they want to see games from using the Android Date menu
@@ -83,13 +84,17 @@ class Sports extends Component {
             if (action !== DatePickerAndroid.dismissedAction) {
               // Selected year, month (0-11) (but need 1-12 for server), day
               month = month + 1;
-              this.state.setState({
-                  selectedDate: {
-                    year: year,
-                    month: month,
-                    day: day}}, function() {
-                        console.log("Set date to :", this.state.selectedDate);
-                    });
+              this.state.selectedDate.year = year;
+              this.state.selectedDate.month = month;
+              this.state.selectedDate.day = day;
+              console.log("Set date to ", this.state.selectedDate)
+            //   this.state.setState({
+            //       selectedDate: {
+            //         year: year,
+            //         month: month,
+            //         day: day}}, function() {
+            //             console.log("Set date to :", this.state.selectedDate);
+            //         });
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
