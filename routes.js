@@ -58,7 +58,6 @@ class Routes extends Component {
             let metaInfo = undefined;
             // get the api type, current text index, and number of texts in the full message
             try {
-                console.log("getting meta info");
                 metaInfo = getMetaInfo(message.body);
             }
             // if something is wrong with the formatting of the text, just return
@@ -71,8 +70,6 @@ class Routes extends Component {
             // does not match its api, get rid of the old stuff in state
             // do the same if there is no info for the api in state
             if (!this.state.api || this.state.api !== metaInfo.apiType) {
-                console.log("no api or different api");
-                console.log("metaInfo: ", metaInfo);
                 this.setState({
                     api: metaInfo.apiType,
                     totalNumberTexts: metaInfo.totalNumberTexts,
@@ -84,7 +81,6 @@ class Routes extends Component {
             }
             // if we're adding a message that is not the first of its type within the api
             else {
-                console.log("same api as before");
                 self.addMessageAndMaybeAddToReduxState(metaInfo.currentTextNumber, metaInfo.content);
             }
         })
@@ -110,11 +106,9 @@ class Routes extends Component {
             index: textIndex
         });
 
-        console.log("adding message to state");
         this.setState({messagesBeingParsed: allMessages}, () => {
             // if we have all the texts in the message, combine them, parse it,
             // and add it to the redux state
-            console.log("this.state: ", this.state);
             if (this.state.messagesBeingParsed.length === this.state.totalNumberTexts) {
                 // remake the messages array just in case some funky business
                 // happened while state was being updated
@@ -131,7 +125,6 @@ class Routes extends Component {
 
                 // parse the big fat message
                 let parsedMessage = parseSms(message);
-                console.log("parsed message is: ", parsedMessage);
 
                 // add the message to redux state's messages array if it has valid info
                 if (parsedMessage && parsedMessage.api !== "not found") {

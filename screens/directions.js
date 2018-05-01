@@ -54,6 +54,29 @@ class Direction extends Component {
         getLocationAndSendText(destination);
     }
 
+    formatDirections(item) {
+        // if no directions found
+        if (item.notFound === true) {
+            let returnString = "Could not find directions";
+            if (typeof item.destination === "string") {
+                returnString = returnString + " to " + item.destination;
+            }
+            return (<Text>{returnString}</Text>);
+        }
+        else {
+            return (
+                <Text>
+                    <Text style={styles.bold}>
+                        {"Distance:   "}{item.distance}
+                    </Text>
+                    <Text style={styles.item}>
+                        {item.info}
+                    </Text>
+                </Text>
+            )
+        }
+    }
+
     FlatListItemSeparator = () => {
         return (
           <View
@@ -73,9 +96,20 @@ class Direction extends Component {
         for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
             let message = messages[messageIndex];
             if (message.api === "directions") {
-                directionsList =  directionsList.concat(message.directionsList);
+                // if the directions are not found, add an object with 'not found' properties
+                if (message.notFound) {
+                    directionsList = [{notFound: true, destination: message.destination}];
+                }
+                // otherwise add the directions
+                else {
+                    directionsList =  directionsList.concat(message.directionsList);
+                }
+                // only want directions to one place at a time
+                break;
             }
         }
+
+        console.log('directionsList: ', directionsList);
 
         // add keys so react-native shuts up
         for (i in directionsList) {
@@ -88,9 +122,9 @@ class Direction extends Component {
                     null :
                     <View style={styles.flatlist}>
                         <FlatList
-                        data={directionsList}
-                        ItemSeparatorComponent = {this.FlatListItemSeparator}
-                        renderItem={({item}) => <View><Text style={styles.bold}>{"Distance:   "}{item.distance}</Text><Text style={styles.item}>{item.info}</Text></View>}
+                            data={directionsList}
+                            ItemSeparatorComponent = {this.FlatListItemSeparator}
+                            renderItem={({item}) => <View>{this.formatDirections(item)}</View>}
                         />
                     </View>
                 }
@@ -169,8 +203,8 @@ export const getLocationAndSendText = (destination) => {
       .then(location => {
           const latitude = location.coords.latitude.toString();
           const longitude = location.coords.longitude.toString();
-          let messageToSend = "d," + latitude + "," + longitude + ";" + destination;
-          console.log(messageToSend)
+          let messageToSend = "d" + latitude + "," + longitude + ";" + destination;
+
           // sent the message with the directions info we want
           sendSms(messageToSend)
           .catch(err => {

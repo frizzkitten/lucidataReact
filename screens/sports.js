@@ -71,7 +71,6 @@ class Sports extends Component {
                 day: today.getDate()
             }
         };
-        console.log("State: ", this.state);
     }
 
     // Allow user to adjust the date they want to see games from using the Android Date menu
@@ -125,11 +124,11 @@ class Sports extends Component {
                 sportKey = "W";
         }
 
-        if (sportKey != "W") { 
+        if (sportKey != "W") {
             const dateString = "" + this.state.selectedDate.year +
                 this.state.selectedDate.month + this.state.selectedDate.day;
             const messageToSend = "s" + sportKey + dateString;
-            console.log(messageToSend);
+
             // show the loading spinner while waiting for response
             this.props.setAwaitingText(true);
             sendSms(messageToSend);

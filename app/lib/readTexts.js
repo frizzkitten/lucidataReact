@@ -29,7 +29,6 @@ export default function readTexts() {
             },
             // on successful read
             (count, smsList) => {
-                console.log("smsList: ", smsList);
                 let smsObjects = JSON.parse(smsList);
                 // combine all the texts that have multiple parts
                 let combinedTexts = combineTexts(smsObjects);
@@ -120,12 +119,8 @@ function combineTexts(smsObjects) {
 
                     // combine the texts if we have the right number of them
                     if (totalNumberTexts === savedTexts.length) {
-                        console.log("savedTexts before sort: ", savedTexts);
-
                         // sort the texts so that they can be combined
                         savedTexts.sort(compareTextPlaces);
-
-                        console.log("savedTexts after sort: ", savedTexts);
 
                         // make one long message with all the text content
                         let combinedMessage = apiType;

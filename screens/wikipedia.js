@@ -92,8 +92,6 @@ class Wikipedia extends Component {
             wikiData[i].key = i;
         }
 
-        console.log("wikiData: ", wikiData);
-
         return (
             <View style={{flex: 1}}>
                 {this.props.keyboardShowing ?

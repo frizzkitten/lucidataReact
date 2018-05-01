@@ -19,6 +19,17 @@ export default function parseSms(message) {
                 }
                 return {api: "wikipedia", info: info};
             case "d":
+                // if directions not found, return object with notFound set to true
+                if (message.includes("not found")) {
+                    // if returned message has place that was searched for,
+                    // include that
+                    let destination = undefined;
+                    if (message.indexOf(" to ") >= 0) {
+                        destination = message.substring(message.indexOf(" to ")+ 4);
+                    }
+                    return {api: "directions", notFound: true, destination};
+                }
+
                 let directionsList = [];
                 // if the message has info in it, return that info
                 if (message.length > API_TYPE_INDEX + 2) {
