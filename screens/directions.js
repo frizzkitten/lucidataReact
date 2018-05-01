@@ -67,7 +67,7 @@ class Direction extends Component {
             return (
                 <Text>
                     <Text style={styles.bold}>
-                        {"Distance:   "}{item.distance}
+                        {"Distance:   " + item.distance + "\n"}
                     </Text>
                     <Text style={styles.item}>
                         {item.info}
@@ -108,8 +108,6 @@ class Direction extends Component {
                 break;
             }
         }
-
-        console.log('directionsList: ', directionsList);
 
         // add keys so react-native shuts up
         for (i in directionsList) {

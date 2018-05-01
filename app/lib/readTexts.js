@@ -17,7 +17,7 @@ export default function readTexts() {
             address: PRODUCTION_NUMBER,
             // the next 2 filters can be used for pagination
             indexFrom: 0, // start from index 0
-            maxCount: 10, // count of SMS to return each time
+            maxCount: 30, // count of SMS to return each time
         };
 
         // // find all the messages from Lucidata
