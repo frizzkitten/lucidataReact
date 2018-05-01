@@ -107,7 +107,7 @@ class Wikipedia extends Component {
                 <View style={styles.container}>
                     <View style={styles.spacedView}>
                         <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1, minWidth: '40%'}}
                             onChangeText={(searchTerm) => this.setState({searchTerm})}
                             value={this.state.searchTerm}
                         />
