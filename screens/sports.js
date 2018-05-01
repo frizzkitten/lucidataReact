@@ -131,6 +131,11 @@ class Sports extends Component {
     }
 
     formatGame(game) {
+        // don't do any formatting if no games found
+        if (game === "No games found.") {
+            return game;
+        }
+
         let msg = game.home + " VS " + game.away;
         if (game.status == "p") {
             msg += ": In Progress";
@@ -146,15 +151,30 @@ class Sports extends Component {
     render() {
         let gameList = [];
         let messages = this.props.messages;
-        // look through the messages received to see if any are of wikipedia type
+        // if a text exists that says no games were found
+        let gamelessTextFound = false;
+        // look through the messages received to see if any are of sports type
         for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
             let message = messages[messageIndex];
             if (message.api === "sports") {
-                // if it is wikipedia type, show it as the info
+                // if it is sports type, show it as the info
                 const games = parseSports(message.data);
-                gameList = gameList.concat(games);
-
+                // don't add the game if message says no games found
+                if (games.length > 0 && games[0] === "No games found.") {
+                    gamelessTextFound = true;
+                }
+                // add the game to the list of games to display as long as it
+                // is an actual game
+                else {
+                    gameList = gameList.concat(games);
+                }
             }
+        }
+
+        // if no games found and we have a text saying no games were found,
+        // add a message saying no games were found
+        if (gameList.length === 0 && gamelessTextFound) {
+            gameList.push("No games found.");
         }
 
         // add keys so react-native shuts up
@@ -251,6 +271,10 @@ export const parseSports = (data) => {
     let games = [];
     if (data == "") {
         return games;
+    }
+    // if no games were found, just return array with "no games found"
+    if (data.includes("games found")) {
+        return ["No games found."];
     }
     // remove api key
     data = data.substring(1, data.length);
