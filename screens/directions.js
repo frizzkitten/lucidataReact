@@ -8,7 +8,8 @@ import {
   Button,
   FlatList,
   ActivityIndicator,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -51,7 +52,7 @@ class Direction extends Component {
 
         // show the loading spinner while waiting for response
         this.props.setAwaitingText(true);
-        getLocationAndSendText(destination);
+        getLocationAndSendText(this, destination);
     }
 
     formatDirections(item) {
@@ -195,7 +196,7 @@ function mapStateToProps(state) {
     }
 }
 
-export const getLocationAndSendText = (destination) => {
+export const getLocationAndSendText = (self, destination) => {
       // get the current location
       getLocation()
       .then(location => {
@@ -211,6 +212,11 @@ export const getLocationAndSendText = (destination) => {
       })
       .catch(error => {
           console.log("error getting location info: ", error);
+          Alert.alert(
+              'Error',
+              'Can\'t get location from phone'
+          )
+          self.props.setAwaitingText(false);
       });
 };
 
