@@ -1,7 +1,8 @@
 # lucidataReact
-Lucidata SMS app for CS506, built with React Native.  
+Lucidata SMS app for CS506, built with React Native.  This project is meant to work in conjunction with the [server](https://github.com/I-Dont-Remember/506-project) to easily allow the user to access information when they don't have wifi or mobile data.  The app sends encoded information in texts that the server processes, makes the correct requests to the attached APIs, then parses the response and returns it.  The app will then display it in a user-friendly way.  It abstracts any of the communication process out of the users hands and lets them only worry about what information they want.
 
-![Screenshot of Homepage](https://github.com/frizzkitten/lucidataReact/blob/master/pics/homepage.png)
+![Screenshot of Homepage](https://github.com/frizzkitten/lucidataReact/blob/master/pics/homepage.png)  
+![Screenshot of Pages](https://github.com/frizzkitten/lucidataReact/blob/master/pics/lucidata-screens.png)
 
 ## Development Environment
 This will give a (hopefully) complete guide to setting up this repo for development.
